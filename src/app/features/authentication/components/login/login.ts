@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, Signal, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -6,6 +6,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {AuthenticationStore} from '@core/auth/stores/authentication.store';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +18,8 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressSpinner
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
@@ -24,8 +27,10 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 })
 export class Login {
   private readonly formBuilder = inject(FormBuilder);
+  private readonly authenticationStore = inject(AuthenticationStore);
 
   protected readonly loginForm: FormGroup;
+  protected readonly isLoading: Signal<boolean> = this.authenticationStore.isLoading;
   protected readonly hidePassword = signal(true);
 
   constructor() {
@@ -37,9 +42,7 @@ export class Login {
 
   onLogin(): void {
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      console.log('Login attempt:', { email, password });
-      // Add your authentication logic here
+      this.authenticationStore.login(this.loginForm.value)
     }
   }
 

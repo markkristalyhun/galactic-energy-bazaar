@@ -12,6 +12,7 @@
             matInput
             type="email"
             formControlName="email"
+            [readonly]="isLoading()"
             placeholder="your@email.com"
             autocomplete="email">
           @if (loginForm.get('email')?.hasError('required')) {
@@ -32,6 +33,7 @@
             matInput
             [type]="hidePassword() ? 'password' : 'text'"
             formControlName="password"
+            [readonly]="isLoading()"
             placeholder="Enter your password"
             autocomplete="current-password">
           <button
@@ -55,8 +57,12 @@
           color="primary"
           type="submit"
           class="login-button"
-          [disabled]="!loginForm.valid">
-          Login
+          [disabled]="!loginForm.valid || isLoading()">
+          @if (isLoading()) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            Login
+          }
         </button>
       </form>
     </mat-card-content>
