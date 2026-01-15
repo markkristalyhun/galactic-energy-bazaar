@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
+import {PlanetStore} from '@core/planet/stores/planet.store';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,5 +8,11 @@ import { Component } from '@angular/core';
   styleUrl: './dashboard.scss',
 })
 export class Dashboard {
+  private readonly planetStore = inject(PlanetStore);
 
+  protected readonly isLoading = this.planetStore.isLoading;
+
+  constructor() {
+    this.planetStore.loadPlanets();
+  }
 }

@@ -27,6 +27,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "mockServiceWorker.js",
+                "input": "src",
+                "output": "/"
               }
             ],
             "styles": [
