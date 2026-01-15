@@ -31,9 +31,9 @@ export class Login {
   private readonly formBuilder = inject(FormBuilder);
   private readonly authenticationStore = inject(AuthenticationStore);
 
-  protected readonly loginForm: FormGroup;
-  protected readonly isLoading: Signal<boolean> = this.authenticationStore.isLoading;
-  protected readonly hidePassword = signal(true);
+  public readonly loginForm: FormGroup;
+  public readonly isLoading: Signal<boolean> = this.authenticationStore.isLoading;
+  public readonly hidePassword = signal(true);
 
   constructor() {
     this.loginForm = this.formBuilder.group({

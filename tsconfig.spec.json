@@ -9,7 +9,8 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@core/*": ["src/app/core/*"]
+      "@core/*": ["src/app/core/*"],
+      "@env/*": ["src/environments/*"]
     }
   },
   "include": [
