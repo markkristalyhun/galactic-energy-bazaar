@@ -1,7 +1,8 @@
 import {inject, Injectable} from '@angular/core';
-import {delay, EMPTY, Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {UserModel} from '../models/user.model';
 import {HttpClient} from '@angular/common/http';
+import {environment} from '@env/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -9,10 +10,13 @@ import {HttpClient} from '@angular/common/http';
 export class AuthenticationService {
   private readonly http = inject(HttpClient);
 
+  private readonly baseUrl = environment.apiUrl;
+
   public login(email: string, password: string): Observable<UserModel> {
-    // return (of(EMPTY) as unknown as Observable<UserModel>).pipe(
-    //   delay(5000)
-    // );
-    throw 'Not implemented function!';
+    return this.http.post<UserModel>(`${this.baseUrl}/login`, {email, password});
+  }
+
+  public logout(): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/logout`, null);
   }
 }

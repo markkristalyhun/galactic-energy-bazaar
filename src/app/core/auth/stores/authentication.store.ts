@@ -5,6 +5,7 @@ import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {catchError, of, pipe, switchMap, tap} from 'rxjs';
 import {CredentialsModel} from '../models/credentials.model';
 import {AuthenticationService} from '../services/authentication.service';
+import {Router} from '@angular/router';
 
 interface AuthenticationState {
   user: UserModel | null;
@@ -26,6 +27,8 @@ export const AuthenticationStore = signalStore(
   })),
   withMethods((store) => {
     const authenticationService = inject(AuthenticationService);
+    const router = inject(Router);
+
     return {
       login: rxMethod<CredentialsModel>(
         pipe(
@@ -41,9 +44,27 @@ export const AuthenticationStore = signalStore(
           tap((result) => {
             if (result) {
               patchState(store, {user: result, isLoading: false});
+              router.navigateByUrl('/dashboard', { replaceUrl: true });
             }
           })
         )
+      ),
+      logout: rxMethod<void>(
+        pipe(
+          tap(() => patchState(store, {isLoading: true, error: null})),
+          switchMap(() =>
+            authenticationService.logout().pipe(
+              catchError((error) => {
+                patchState(store, {isLoading: false, error, user: null})
+                return of(null);
+              })
+            )
+          ),
+          tap(() => {
+            patchState(store, {user: null, isLoading: false});
+            router.navigateByUrl('/auth', { replaceUrl: true });
+          })
+        ),
       )
     };
   }),
