@@ -1,0 +1,9 @@
+{
+  "app": {
+    "title": "Galactic Energy Bazaar"
+  },
+  "validation": {
+    "required": "{{field}} is required",
+    "enterValid": "Please enter a valid {{field}}"
+  }
+}

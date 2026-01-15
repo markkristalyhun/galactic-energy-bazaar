@@ -8,6 +8,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthenticationStore} from '@core/auth/stores/authentication.store';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {TranslocoModule} from '@jsverse/transloco';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
     MatButtonModule,
     MatIconModule,
     ReactiveFormsModule,
-    MatProgressSpinner
+    MatProgressSpinner,
+    TranslocoModule,
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
