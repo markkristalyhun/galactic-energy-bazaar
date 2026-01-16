@@ -1,0 +1,40 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  padding: 1.5rem;
+
+  // TODO
+  @media (max-width: 600px) {
+    padding: 1rem;
+  }
+}
+
+.app-footer {
+  margin-top: auto;
+
+  mat-toolbar {
+    justify-content: center;
+    font-size: 0.875rem;
+
+    // TODO
+    @media (max-width: 600px) {
+      font-size: 0.75rem;
+    }
+  }
+}

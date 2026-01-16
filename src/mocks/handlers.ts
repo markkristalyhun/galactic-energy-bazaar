@@ -1,6 +1,8 @@
-import { http, HttpResponse } from 'msw';
+import {http, HttpResponse, ws} from 'msw';
 import {users} from './user.mock';
 import {sessionStore} from './session-store';
+
+const transactionSocket = ws.link('ws://localhost:4200/api/transactions');
 
 export const handlers = [
   http.post<any, {email: string, password: string}>('/api/login', async ({ request }) => {
@@ -62,5 +64,25 @@ export const handlers = [
   http.get('/api/planets', () => HttpResponse.json([
     {id: '1', name: 'Earth'},
     {id: '2', name: 'Ulthar'},
-  ]))
+  ])),
+
+  transactionSocket.addEventListener('connection', ({client}) => {
+    // Simulate incoming messages
+    const interval = setInterval(() => {
+      client.send(JSON.stringify({
+        id: Math.random().toString(),
+        product: 'ENERGY',
+        transactionType: 'BUY',
+        timeStamp: (new Date()).toISOString(),
+        volume: 100,
+        pricePerUnit: 500,
+        planetId: '1',
+      }));
+    }, 1); // 1000 messages/second for testing
+
+    // Clean up on disconnect
+    client.addEventListener('close', () => {
+      clearInterval(interval);
+    });
+  })
 ];

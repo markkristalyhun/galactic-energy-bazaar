@@ -7,8 +7,8 @@ export const routes: Routes = [
     loadChildren: () => import('./features/authentication/authentication.routes').then(m => m.AUTH_ROUTES),
   },
   {
-    path: 'dashboard',
-    loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES),
+    path: '',
+    loadChildren: () => import('./features/home/home.routes').then(m => m.HOME_ROUTES),
     canActivate: [isAuthenticatedGuard],
   },
   {

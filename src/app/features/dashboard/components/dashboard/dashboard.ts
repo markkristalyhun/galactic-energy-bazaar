@@ -1,18 +1,69 @@
-import {Component, inject} from '@angular/core';
-import {PlanetStore} from '@core/planet/stores/planet.store';
+import {ChangeDetectionStrategy, Component, computed, effect, inject, OnDestroy, OnInit} from '@angular/core';
+import {TransactionStore} from '@core/transaction/stores/transaction.store';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardSubtitle,
+  MatCardTitle
+} from '@angular/material/card';
+import {MatButton} from '@angular/material/button';
+import {CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
+import {
+  CdkCell,
+  CdkCellDef,
+  CdkColumnDef,
+  CdkHeaderCell,
+  CdkHeaderCellDef,
+  CdkHeaderRow, CdkHeaderRowDef, CdkRecycleRows, CdkRow, CdkRowDef,
+  CdkTable
+} from '@angular/cdk/table';
+import {TransactionModel} from '@core/transaction/models/transaction.model';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [
+    MatCard,
+    MatCardActions,
+    MatCardContent,
+    MatCardHeader,
+    MatCardSubtitle,
+    MatCardTitle,
+    MatButton,
+    CdkVirtualScrollViewport,
+    CdkTable,
+    CdkFixedSizeVirtualScroll,
+    CdkColumnDef,
+    CdkHeaderCell,
+    CdkCell,
+    CdkCellDef,
+    CdkHeaderCellDef,
+    CdkHeaderRow,
+    CdkRow,
+    CdkRowDef,
+    CdkHeaderRowDef,
+    CdkRecycleRows
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Dashboard {
-  private readonly planetStore = inject(PlanetStore);
+export class Dashboard implements OnInit, OnDestroy {
+  private readonly transactionStore = inject(TransactionStore);
 
-  protected readonly isLoading = this.planetStore.isLoading;
+  public readonly displayedColumns = ['time', 'product'];
+  public readonly transactions = computed(() => this.transactionStore.transactions().reverse());
 
-  constructor() {
-    this.planetStore.loadPlanets();
+  ngOnInit() {
+    this.transactionStore.startWatching();
+  }
+
+  public trackBy(index: number, element: TransactionModel): string {
+    return element.id;
+  }
+
+  ngOnDestroy() {
+    this.transactionStore.stopWatching();
   }
 }

@@ -16,6 +16,7 @@ async function enableMocking() {
     serviceWorker: {
       url: '/mockServiceWorker.js',
     },
+    quiet: true,
   });
 }
 

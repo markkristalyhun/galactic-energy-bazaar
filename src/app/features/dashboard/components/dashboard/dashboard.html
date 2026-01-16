@@ -1,1 +1,44 @@
-<p>dashboard works!</p>
+<div class="cards-container">
+  <mat-card appearance="raised" class="content-card">
+    <mat-card-header>
+      <mat-card-title>Card 1</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+      <cdk-virtual-scroll-viewport class="viewport-container" [itemSize]="48" [maxBufferPx]="1200" [minBufferPx]="400">
+        <table cdk-table [dataSource]="transactions()" [trackBy]="trackBy" recycleRows>
+          <ng-container cdkColumnDef="time">
+            <th cdk-header-cell *cdkHeaderCellDef> TODO timestamp </th>
+            <td cdk-cell *cdkCellDef="let element"> {{element.timeStamp}} </td>
+          </ng-container>
+
+          <ng-container cdkColumnDef="product">
+            <th cdk-header-cell *cdkHeaderCellDef> TODO product </th>
+            <td cdk-cell *cdkCellDef="let element"> {{element.product}} </td>
+          </ng-container>
+
+          <tr cdk-header-row *cdkHeaderRowDef="displayedColumns"></tr>
+          <tr cdk-row *cdkRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </cdk-virtual-scroll-viewport>
+
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="raised" class="content-card">
+    <mat-card-header>
+      <mat-card-title>Card 2</mat-card-title>
+      <mat-card-subtitle>Second card subtitle</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        This is the content of the second card. The layout uses CSS Grid
+        to ensure proper responsive behavior across all device sizes.
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="primary">ACTION 1</button>
+      <button mat-button>ACTION 2</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
