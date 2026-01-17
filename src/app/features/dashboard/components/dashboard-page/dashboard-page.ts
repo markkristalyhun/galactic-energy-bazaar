@@ -1,6 +1,7 @@
-import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, effect, inject, OnDestroy} from '@angular/core';
 import {PlanetStore} from '@core/planet/stores/planet.store';
 import {Dashboard} from '../dashboard/dashboard';
+import {TransactionStore} from '@core/transaction/stores/transaction.store';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -11,12 +12,22 @@ import {Dashboard} from '../dashboard/dashboard';
   styleUrl: './dashboard-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardPage {
+export class DashboardPage implements OnDestroy {
   private readonly planetStore = inject(PlanetStore);
+  private readonly transactionStore = inject(TransactionStore);
 
+  public readonly transactions = this.transactionStore.transactions;
   protected readonly isLoading = this.planetStore.isLoading;
 
   constructor() {
-    this.planetStore.loadPlanets();
+    effect(() => {
+      if (!this.isLoading() && !this.transactionStore.connected()) {
+        this.transactionStore.startWatching();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.transactionStore.stopWatching();
   }
 }

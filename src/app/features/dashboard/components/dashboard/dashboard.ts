@@ -1,5 +1,4 @@
-import {ChangeDetectionStrategy, Component, computed, effect, inject, OnDestroy, OnInit} from '@angular/core';
-import {TransactionStore} from '@core/transaction/stores/transaction.store';
+import {ChangeDetectionStrategy, Component, input} from '@angular/core';
 import {
   MatCard,
   MatCardActions,
@@ -16,7 +15,11 @@ import {
   CdkColumnDef,
   CdkHeaderCell,
   CdkHeaderCellDef,
-  CdkHeaderRow, CdkHeaderRowDef, CdkRecycleRows, CdkRow, CdkRowDef,
+  CdkHeaderRow,
+  CdkHeaderRowDef,
+  CdkRecycleRows,
+  CdkRow,
+  CdkRowDef,
   CdkTable
 } from '@angular/cdk/table';
 import {TransactionModel} from '@core/transaction/models/transaction.model';
@@ -49,21 +52,12 @@ import {TransactionModel} from '@core/transaction/models/transaction.model';
   styleUrl: './dashboard.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Dashboard implements OnInit, OnDestroy {
-  private readonly transactionStore = inject(TransactionStore);
+export class Dashboard {
+  public readonly transactions = input<TransactionModel[]>([]);
 
   public readonly displayedColumns = ['time', 'product'];
-  public readonly transactions = computed(() => this.transactionStore.transactions().reverse());
-
-  ngOnInit() {
-    this.transactionStore.startWatching();
-  }
 
   public trackBy(index: number, element: TransactionModel): string {
     return element.id;
-  }
-
-  ngOnDestroy() {
-    this.transactionStore.stopWatching();
   }
 }

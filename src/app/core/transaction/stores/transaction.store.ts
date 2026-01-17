@@ -34,12 +34,9 @@ export const TransactionStore = signalStore(
               tap({
                 next: (newTransactions) => {
                   patchState(store, (state) => {
-                    let transactions = [...state.transactions, ...newTransactions];
+                    let transactions = [...(newTransactions.reverse()), ...state.transactions];
 
-                    const overflow = transactions.length - MAX_TRANSACTION_SIZE;
-                    if (overflow > 0) {
-                      transactions.splice(0, overflow);
-                    }
+                    transactions.splice(MAX_TRANSACTION_SIZE);
 
                     return {
                       ...state,
