@@ -31,3 +31,13 @@
 .viewport-container {
   height: 100%;
 }
+
+.viewport-container table {
+  width: 100%;
+}
+
+.viewport-container td,
+.viewport-container th {
+  height: 2rem;
+  text-align: left;
+}

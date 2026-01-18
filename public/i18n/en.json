@@ -1,6 +1,7 @@
 {
   "app": {
-    "title": "Galactic Energy Bazaar"
+    "title": "Galactic Energy Bazaar",
+    "footer": "© 2026 Galactic Energy Bazaar. All rights reserved."
   },
   "validation": {
     "required": "{{field}} is required",

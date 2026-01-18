@@ -1,3 +1,16 @@
 {
-  "title": "Dashboard"
+  "title": "Dashboard",
+  "transactions": "Transactions",
+  "leaderboard": "Leaderboard",
+  "table": {
+    "timeStamp": "Timestamp",
+    "product": "Product",
+    "planet": "Planet",
+    "transactionType": "Transaction type",
+    "price": "Price TODO",
+    "volume": "Volume",
+    "total": "Total",
+    "transactionValue": "Sum transactions",
+    "numberOfTransaction": "Number of transactions"
+  }
 }

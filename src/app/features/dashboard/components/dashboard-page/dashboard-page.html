@@ -1,3 +1,9 @@
-<app-dashboard
-  [transactions]="transactions()"
-></app-dashboard>
+@if (!isLoading()) {
+  <app-dashboard
+    [transactions]="transactions()"
+    [leaderboardValues]="leaderboardValues()"
+    [planets]="planets()"
+  ></app-dashboard>
+} @else {
+  <app-dashboard-skeleton></app-dashboard-skeleton>
+}

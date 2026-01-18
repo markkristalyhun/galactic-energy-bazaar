@@ -2,6 +2,15 @@ import {http, HttpResponse, ws} from 'msw';
 import {users} from './user.mock';
 import {sessionStore} from './session-store';
 
+const getRandomElement = <T>(array: T[]): T =>
+  array[Math.floor(Math.random() * array.length)];
+
+const randomNumber = (min: number, max: number, decimalPlaces: number): number => {
+  const rand = Math.random() * (max - min) + min;
+  const power = Math.pow(10, decimalPlaces);
+  return Math.floor(rand * power) / power;
+}
+
 const transactionSocket = ws.link('ws://localhost:4200/api/transactions');
 
 export const handlers = [
@@ -64,19 +73,22 @@ export const handlers = [
   http.get('/api/planets', () => HttpResponse.json([
     {id: '1', name: 'Earth'},
     {id: '2', name: 'Ulthar'},
+    {id: '3', name: 'Javia'},
   ])),
 
   transactionSocket.addEventListener('connection', ({client}) => {
     // Simulate incoming messages
     const interval = setInterval(() => {
+
+
       client.send(JSON.stringify({
         id: Math.random().toString(),
         product: 'ENERGY',
-        transactionType: 'BUY',
+        transactionType: getRandomElement(['BUY', 'SELL']),
         timeStamp: (new Date()).toISOString(),
-        volume: 100,
-        pricePerUnit: 500,
-        planetId: '1',
+        volume: randomNumber(5, 5000, 0),
+        pricePerUnit: randomNumber(1, 10000, 2),
+        planetId: getRandomElement(['1', '2', '3']),
       }));
     }, 1); // 1000 messages/second for testing
 

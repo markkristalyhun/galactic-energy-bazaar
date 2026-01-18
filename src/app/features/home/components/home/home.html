@@ -1,19 +1,21 @@
 <div class="app-container">
-  <mat-toolbar color="primary" class="mat-elevation-z4">
-    <span>Tits</span>
-    <span class="spacer"></span>
-    <button mat-icon-button aria-label="Logout" (click)="onLogout()">
-      <mat-icon>logout</mat-icon>
-    </button>
-  </mat-toolbar>
-
-  <main class="main-content">
-    <router-outlet></router-outlet>
-  </main>
-
-  <footer class="app-footer">
-    <mat-toolbar color="accent">
-      <span>© 2026 My App. All rights reserved.</span>
+  <ng-container *transloco="let t">
+    <mat-toolbar color="primary" class="mat-elevation-z4">
+      <span>{{t('app.title')}}</span>
+      <span class="spacer"></span>
+      <button mat-icon-button aria-label="Logout" (click)="onLogout()">
+        <mat-icon>logout</mat-icon>
+      </button>
     </mat-toolbar>
-  </footer>
+
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer class="app-footer">
+      <mat-toolbar color="accent">
+        <span>{{t('app.footer')}}</span>
+      </mat-toolbar>
+    </footer>
+  </ng-container>
 </div>
