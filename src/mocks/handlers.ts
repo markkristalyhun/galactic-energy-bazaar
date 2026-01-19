@@ -11,6 +11,16 @@ const randomNumber = (min: number, max: number, decimalPlaces: number): number =
   return Math.floor(rand * power) / power;
 }
 
+const unauthorizedError = () => HttpResponse.json(
+  { message: 'error.unauthorized' },
+  { status: 401 }
+);
+
+const invalidSessionError = () => HttpResponse.json(
+  { message: 'error.invalidSession' },
+  { status: 401 }
+);
+
 const transactionSocket = ws.link('ws://localhost:4200/api/transactions');
 
 export const handlers = [
@@ -23,7 +33,7 @@ export const handlers = [
 
     if (!user) {
       return HttpResponse.json(
-        { error: 'Invalid credentials' },
+        { message: 'error.invalidCredentials' },
         { status: 401 }
       );
     }
@@ -70,17 +80,28 @@ export const handlers = [
     );
   }),
 
-  http.get('/api/planets', () => HttpResponse.json([
-    {id: '1', name: 'Earth'},
-    {id: '2', name: 'Ulthar'},
-    {id: '3', name: 'Javia'},
-  ])),
+  http.get('/api/planets', ({ cookies }) => {
+    const authToken = cookies['auth_token'];
+    if (!authToken) {
+      return unauthorizedError();
+    }
+
+    const session = sessionStore.getSessionByAuthToken(authToken);
+    if (!session) {
+      return invalidSessionError();
+    }
+
+    return HttpResponse.json([
+      {id: '1', name: 'Earth'},
+      {id: '2', name: 'Ulthar'},
+      {id: '3', name: 'Javia'},
+    ])
+  }),
 
   transactionSocket.addEventListener('connection', ({client}) => {
     // Simulate incoming messages
     const interval = setInterval(() => {
-
-
+      
       client.send(JSON.stringify({
         id: Math.random().toString(),
         product: 'ENERGY',

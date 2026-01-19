@@ -6,5 +6,14 @@
   "validation": {
     "required": "{{field}} is required",
     "enterValid": "Please enter a valid {{field}}"
+  },
+  "action": {
+    "close": "Close"
+  },
+  "error": {
+    "unexpectedError": "An unexpected error occurred",
+    "unauthorized": "Unauthorized",
+    "invalidSession": "Invalid session",
+    "invalidCredentials": "Invalid credentials"
   }
 }
