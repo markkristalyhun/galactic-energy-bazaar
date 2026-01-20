@@ -4,7 +4,7 @@ import {provideTranslocoScope} from '@jsverse/transloco';
 
 export const DASHBOARD_ROUTES: Routes = [
   {
-    path: 'dashboard',
+    path: '',
     component: DashboardPage,
     providers: [provideTranslocoScope('dashboard')]
   }

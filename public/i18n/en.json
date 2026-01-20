@@ -3,6 +3,10 @@
     "title": "Galactic Energy Bazaar",
     "footer": "© 2026 Galactic Energy Bazaar. All rights reserved."
   },
+  "toolbar": {
+    "admin": "Admin",
+    "dashboard": "Dashboard"
+  },
   "validation": {
     "required": "{{field}} is required",
     "enterValid": "Please enter a valid {{field}}"
@@ -15,5 +19,12 @@
     "unauthorized": "Unauthorized",
     "invalidSession": "Invalid session",
     "invalidCredentials": "Invalid credentials"
+  },
+  "forbidden": {
+    "accessDenied": "Access Denied",
+    "haveNoPermission": "You don't have permission to access this page.",
+    "help": "If you believe this is an error, please contact your system administrator.",
+    "goBack": "Go Back",
+    "geHome": "Go to Home"
   }
 }

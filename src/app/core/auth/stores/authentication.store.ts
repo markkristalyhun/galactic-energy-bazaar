@@ -24,6 +24,7 @@ export const AuthenticationStore = signalStore(
   withState(initialState),
   withComputed(({user}) => ({
     isLoggedIn: computed(() => !!user()),
+    role: computed(() => user()?.role)
   })),
   withMethods((store) => {
     const authenticationService = inject(AuthenticationService);

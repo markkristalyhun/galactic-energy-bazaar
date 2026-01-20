@@ -1,0 +1,49 @@
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 1.25rem;
+}
+
+.error-card {
+  max-width: 31.25rem;
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 5rem;
+  width: 5rem;
+  height: 5rem;
+  // TODO
+  color: #f44336;
+  margin: 1.25rem auto;
+}
+
+h1 {
+  font-size: 2rem;
+  margin: 1.25rem 0;
+  // TODO
+  color: #999;
+}
+
+.error-message {
+  font-size: 1.1rem;
+  // TODO
+  color: #666;
+  margin-bottom: 0.625rem;
+}
+
+.help-text {
+  font-size: 0.9rem;
+  // TODO
+  color: #999;
+  margin-bottom: 1.875rem;
+}
+
+mat-card-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  padding: 1.25rem;
+}

@@ -1,11 +1,13 @@
 import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {MatIcon} from "@angular/material/icon";
-import {MatIconButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatToolbar} from "@angular/material/toolbar";
-import {RouterOutlet} from "@angular/router";
+import {RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {AuthenticationStore} from '@core/auth/stores/authentication.store';
 import {PlanetStore} from '@core/planet/stores/planet.store';
 import {TranslocoDirective} from '@jsverse/transloco';
+import {HasRoleDirective} from '@core/auth/directives/has-role.directive';
+import {Role} from '@core/auth/models/role';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +16,11 @@ import {TranslocoDirective} from '@jsverse/transloco';
     MatIconButton,
     MatToolbar,
     RouterOutlet,
-    TranslocoDirective
+    TranslocoDirective,
+    MatButton,
+    RouterLink,
+    RouterLinkActive,
+    HasRoleDirective
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
@@ -31,4 +37,6 @@ export class Home implements OnInit {
   public onLogout() {
     this.authenticationStore.logout();
   }
+
+  protected readonly Role = Role;
 }

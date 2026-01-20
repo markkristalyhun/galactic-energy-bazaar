@@ -45,10 +45,7 @@ export const handlers = [
     document.cookie = `auth_token=${session.authToken}; Secure; SameSite=Strict; Path=/`;
 
     return HttpResponse.json(
-      {
-        success: true,
-        user: { id: user.id, username: user.email, planetId: user.planetId }
-      },
+      { id: user.id, username: user.email, planetId: user.planetId, role: user.role },
       {
         status: 200,
         headers: {
@@ -101,7 +98,7 @@ export const handlers = [
   transactionSocket.addEventListener('connection', ({client}) => {
     // Simulate incoming messages
     const interval = setInterval(() => {
-      
+
       client.send(JSON.stringify({
         id: Math.random().toString(),
         product: 'ENERGY',
