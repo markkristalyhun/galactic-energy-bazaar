@@ -1,13 +1,16 @@
 import {TransactionModel} from '@core/transaction/models/transaction.model';
 import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
-import {catchError, EMPTY, pipe, switchMap, tap} from 'rxjs';
+import {catchError, EMPTY, pipe, retry, switchMap, tap, timer} from 'rxjs';
 import {inject} from '@angular/core';
 import {TransactionService} from '@core/transaction/services/transaction.service';
 import {groupBy} from 'lodash-es';
 import {LeaderboardModel} from '@core/transaction/models/leaderboard.model';
 
 const MAX_TRANSACTION_SIZE = 10000;
+const MAX_RETRIES = 10;
+const INITIAL_DELAY = 1000;
+const MAX_DELAY = 30000;
 
 interface TransactionState {
   transactions: TransactionModel[];
@@ -62,6 +65,17 @@ export const TransactionStore = signalStore(
                 finalize: () => {
                   patchState(store, {connected: false});
                 },
+              }),
+              retry({
+                count: MAX_RETRIES,
+                delay: (error, retryCount) => {
+                  const delay = Math.min(
+                    INITIAL_DELAY * Math.pow(2, retryCount),
+                    MAX_DELAY
+                  );
+                  return timer(delay);
+                },
+                resetOnSuccess: true,
               }),
               catchError(() => EMPTY)
             )

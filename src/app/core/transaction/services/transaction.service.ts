@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {WebSocketSubject} from 'rxjs/internal/observable/dom/WebSocketSubject';
 import {TransactionModel} from '@core/transaction/models/transaction.model';
-import {bufferTime, Observable} from 'rxjs';
+import {bufferTime, filter, Observable} from 'rxjs';
 import {webSocket} from 'rxjs/webSocket';
 import {environment} from '@env/environment';
 
@@ -18,7 +18,8 @@ export class TransactionService {
 
     return this.webSocket$.pipe(
       bufferTime(200),
-    )
+      filter(transactions => transactions.length > 0),
+    );
   }
 
   public disconnect() {

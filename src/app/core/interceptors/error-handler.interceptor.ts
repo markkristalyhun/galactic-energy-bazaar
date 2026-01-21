@@ -1,12 +1,10 @@
 import {HttpErrorResponse, HttpInterceptorFn} from '@angular/common/http';
 import {inject} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {catchError, throwError} from 'rxjs';
-import {TranslocoService} from '@jsverse/transloco';
+import {ErrorHandlerService} from '@core/error/services/error-handler.service';
 
 export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
-  const snackBar = inject(MatSnackBar);
-  const translateService = inject(TranslocoService);
+  const errorHandlerService = inject(ErrorHandlerService);
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
@@ -16,13 +14,7 @@ export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
         message = error?.error?.message;
       }
 
-      snackBar.open(translateService.translate(message), translateService.translate('action.close'), {
-        duration: 50000,
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
-        panelClass: ['error-snackbar']
-      });
-
+      errorHandlerService.showError(message)
       return throwError(() => error);
     })
   );

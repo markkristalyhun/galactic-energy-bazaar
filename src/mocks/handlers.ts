@@ -128,7 +128,6 @@ export const handlers = [
   transactionSocket.addEventListener('connection', ({client}) => {
     // Simulate incoming messages
     const interval = setInterval(() => {
-
       client.send(JSON.stringify({
         id: Math.random().toString(),
         product: 'ENERGY',
