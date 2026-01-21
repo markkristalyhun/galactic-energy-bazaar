@@ -19,6 +19,7 @@ import {LeaderboardModel} from '@core/transaction/models/leaderboard.model';
 import {TranslocoDirective} from '@jsverse/transloco';
 import {PlanetModel} from '@core/planet/models/planet.model';
 import {formatDate} from '@angular/common';
+import {UserCurrencyPipe} from '@core/currency/pipes/user-currency.pipe';
 
 @Component({
   selector: 'app-dashboard',
@@ -48,6 +49,7 @@ import {formatDate} from '@angular/common';
 })
 export class Dashboard {
   private locale = inject(LOCALE_ID);
+  private readonly userCurrencyPipe = inject(UserCurrencyPipe);
 
   public readonly transactions = input<TransactionModel[]>([]);
   public readonly leaderboardValues = input<LeaderboardModel[]>([]);
@@ -64,7 +66,8 @@ export class Dashboard {
       ...transaction,
       time: formatDate(transaction.timeStamp, 'medium', this.locale), // TODO get locale from planet/user data
       planet: this.planetMap().get(transaction.planetId)?.name ?? transaction.planetId,
-      sum: transaction.volume * transaction.pricePerUnit,
+      formattedPricePerUnit: this.userCurrencyPipe.transform(transaction.pricePerUnit),
+      sum: this.userCurrencyPipe.transform(transaction.volume * transaction.pricePerUnit),
     }))
   );
 
@@ -72,6 +75,7 @@ export class Dashboard {
     this.leaderboardValues().map(leaderboardValue => ({
       ...leaderboardValue,
       planet: this.planetMap().get(leaderboardValue.planetId)?.name ?? leaderboardValue.planetId,
+      sum: this.userCurrencyPipe.transform(leaderboardValue.sumTransactionValue),
     })),
   );
 

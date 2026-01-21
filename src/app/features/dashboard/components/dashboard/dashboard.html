@@ -31,7 +31,7 @@
 
             <ng-container cdkColumnDef="pricePerUnit">
               <th cdk-header-cell *cdkHeaderCellDef>{{t('dashboard.table.price')}}</th>
-              <td cdk-cell *cdkCellDef="let element"> {{ element.pricePerUnit }}</td>
+              <td cdk-cell *cdkCellDef="let element"> {{ element.formattedPricePerUnit }}</td>
             </ng-container>
 
             <ng-container cdkColumnDef="volume">
@@ -67,7 +67,7 @@
             </ng-container>
             <ng-container cdkColumnDef="sum">
               <th cdk-header-cell *cdkHeaderCellDef>{{t('dashboard.table.transactionValue')}}</th>
-              <td cdk-cell *cdkCellDef="let element">{{ element.sumTransactionValue }}</td>
+              <td cdk-cell *cdkCellDef="let element">{{ element.sum }}</td>
             </ng-container>
             <ng-container cdkColumnDef="transaction">
               <th cdk-header-cell *cdkHeaderCellDef>{{t('dashboard.table.numberOfTransaction')}}</th>

@@ -89,10 +89,40 @@ export const handlers = [
     }
 
     return HttpResponse.json([
-      {id: '1', name: 'Earth'},
-      {id: '2', name: 'Ulthar'},
-      {id: '3', name: 'Javia'},
+      {id: '1', name: 'Earth', currency: 'USD'},
+      {id: '2', name: 'Ulthar', currency: 'UTH'},
+      {id: '3', name: 'Javia', currency: 'JAV'},
     ])
+  }),
+
+  http.get('/api/rates', ({request}) => {
+    const existingCurrencies = ['USD', 'UTH', 'JAV'];
+
+    const url = new URL(request.url);
+    const baseCurrency = url.searchParams.get('base');
+
+    if (!baseCurrency) {
+      return new HttpResponse(null, {status: 404});
+    }
+
+    const currencyRates = existingCurrencies
+      .filter(currency => currency !== baseCurrency)
+      .map(currency => ({
+        currency,
+        rate: randomNumber(0.5, 1.8, 4),
+      }))
+      .reduce((accumulator, currentValue) => {
+        return {
+          ...accumulator,
+          [currentValue.currency]: currentValue.rate,
+        };
+      }, {});
+
+    return HttpResponse.json({
+      base: baseCurrency,
+      timeStamp: (new Date()).toISOString(),
+      rates: currencyRates,
+    });
   }),
 
   transactionSocket.addEventListener('connection', ({client}) => {

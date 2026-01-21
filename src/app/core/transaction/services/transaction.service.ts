@@ -13,7 +13,7 @@ export class TransactionService {
 
   public connect(): Observable<TransactionModel[]> {
     if (!this.webSocket$ || this.webSocket$.closed) {
-      this.webSocket$ = webSocket(`${environment.websocketApiUrl}/transactions`);
+      this.webSocket$ = webSocket(`${environment.transactionWebsocketUrl}/transactions`);
     }
 
     return this.webSocket$.pipe(

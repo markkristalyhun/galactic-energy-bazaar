@@ -8,6 +8,7 @@ import {PlanetStore} from '@core/planet/stores/planet.store';
 import {TranslocoDirective} from '@jsverse/transloco';
 import {HasRoleDirective} from '@core/auth/directives/has-role.directive';
 import {Role} from '@core/auth/models/role';
+import {CurrencyStore} from '@core/currency/stores/currency.store';
 
 @Component({
   selector: 'app-home',
@@ -29,14 +30,17 @@ import {Role} from '@core/auth/models/role';
 export class Home implements OnInit {
   private readonly authenticationStore = inject(AuthenticationStore);
   private readonly planetStore = inject(PlanetStore);
+  private readonly currencyStore = inject(CurrencyStore);
+
+  protected readonly Role = Role;
 
   ngOnInit() {
     this.planetStore.loadPlanets();
+    this.currencyStore.startPolling();
   }
 
   public onLogout() {
+    this.currencyStore.stopPolling();
     this.authenticationStore.logout();
   }
-
-  protected readonly Role = Role;
 }
