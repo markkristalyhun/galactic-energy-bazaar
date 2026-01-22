@@ -41,7 +41,10 @@ export const PlanetStore = signalStore(
             }
           })
         )
-      )
+      ),
+      reset: () => {
+        patchState(store, initialState);
+      },
     };
   })
 );

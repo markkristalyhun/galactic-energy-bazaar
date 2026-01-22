@@ -86,6 +86,10 @@ export const TransactionStore = signalStore(
         transactionService.disconnect();
         patchState(store, { connected: false });
       },
+      reset: () => {
+        transactionService.disconnect();
+        patchState(store, initialState);
+      },
     };
   }),
 )

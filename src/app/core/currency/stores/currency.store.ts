@@ -37,6 +37,9 @@ export const CurrencyStore = signalStore(
       stopPolling: () => {
         currencyRateService.stopUpdatingCurrencyRates();
       },
+      reset: () => {
+        patchState(store, initialState);
+      },
     };
   }),
 );

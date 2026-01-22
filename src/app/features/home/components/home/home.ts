@@ -1,14 +1,15 @@
-import {ChangeDetectionStrategy, Component, effect, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatToolbar} from "@angular/material/toolbar";
 import {RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {AuthenticationStore} from '@core/auth/stores/authentication.store';
 import {PlanetStore} from '@core/planet/stores/planet.store';
-import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
+import {TranslocoDirective} from '@jsverse/transloco';
 import {HasRoleDirective} from '@core/auth/directives/has-role.directive';
 import {Role} from '@core/auth/models/role';
 import {CurrencyStore} from '@core/currency/stores/currency.store';
+import {TransactionStore} from '@core/transaction/stores/transaction.store';
 
 @Component({
   selector: 'app-home',
@@ -27,10 +28,11 @@ import {CurrencyStore} from '@core/currency/stores/currency.store';
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Home implements OnInit {
+export class Home implements OnInit, OnDestroy {
   private readonly authenticationStore = inject(AuthenticationStore);
   private readonly planetStore = inject(PlanetStore);
   private readonly currencyStore = inject(CurrencyStore);
+  private readonly transactionStore = inject(TransactionStore);
 
   protected readonly Role = Role;
 
@@ -42,5 +44,11 @@ export class Home implements OnInit {
   public onLogout() {
     this.currencyStore.stopPolling();
     this.authenticationStore.logout();
+  }
+
+  ngOnDestroy() {
+    this.transactionStore.reset();
+    this.planetStore.reset();
+    this.currencyStore.reset();
   }
 }
