@@ -1,3 +1,5 @@
+@use "breakpoints";
+
 :host {
   flex: 1;
   display: flex;
@@ -12,8 +14,7 @@
   margin: 0 auto;
   flex: 1;
 
-  // TODO
-  @media (max-width: 600px) {
+  @include breakpoints.mobile {
     gap: 1rem;
   }
 }

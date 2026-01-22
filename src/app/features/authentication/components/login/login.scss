@@ -1,3 +1,5 @@
+@use "breakpoints";
+
 .login-container {
   display: flex;
   justify-content: center;
@@ -43,7 +45,7 @@ form {
 }
 
 /* Mobile responsiveness */
-@media (max-width: 37.4375rem) {
+@include breakpoints.mobile {
   .login-card {
     max-width: 100%;
     padding: 1rem;

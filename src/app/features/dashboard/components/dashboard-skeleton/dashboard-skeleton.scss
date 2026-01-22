@@ -1,3 +1,5 @@
+@use "breakpoints";
+
 :host {
   display: flex;
   flex: 1;
@@ -12,8 +14,7 @@
   margin: 0 auto;
   flex: 1;
 
-  // TODO
-  @media (max-width: 600px) {
+  @include breakpoints.mobile {
     gap: 1rem;
   }
 }
@@ -29,9 +30,8 @@
 }
 
 .skeleton {
-  // TODO
-  --skeleton-base: #f0f0f0;
-  --skeleton-highlight: #e0e0e0;
+  --skeleton-base: var(--mat-sys-surface-container-high);
+  --skeleton-highlight: var(--mat-sys-surface-container-highest);
 
   background: linear-gradient(
       90deg,
@@ -43,12 +43,6 @@
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
   border-radius: 0.25rem;
-
-  @media (prefers-color-scheme: dark) {
-    // TODO
-    --skeleton-base: #2a2a2a;
-    --skeleton-highlight: #3a3a3a;
-  }
 }
 
 @keyframes shimmer {

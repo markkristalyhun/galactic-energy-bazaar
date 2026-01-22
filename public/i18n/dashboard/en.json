@@ -7,7 +7,7 @@
     "product": "Product",
     "planet": "Planet",
     "transactionType": "Transaction type",
-    "price": "Price TODO",
+    "price": "Price",
     "volume": "Volume",
     "total": "Total",
     "transactionValue": "Sum transactions",

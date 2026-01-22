@@ -15,29 +15,25 @@
   font-size: 5rem;
   width: 5rem;
   height: 5rem;
-  // TODO
-  color: #f44336;
+  color: var(--mat-sys-error);
   margin: 1.25rem auto;
 }
 
 h1 {
   font-size: 2rem;
   margin: 1.25rem 0;
-  // TODO
-  color: #999;
+  color: var(--mat-sys-on-surface);
 }
 
 .error-message {
   font-size: 1.1rem;
-  // TODO
-  color: #666;
+  color: var(--mat-sys-on-surface);
   margin-bottom: 0.625rem;
 }
 
 .help-text {
   font-size: 0.9rem;
-  // TODO
-  color: #999;
+  color:var(--mat-sys-on-surface);
   margin-bottom: 1.875rem;
 }
 

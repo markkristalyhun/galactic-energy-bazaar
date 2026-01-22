@@ -1,7 +1,15 @@
+@use "breakpoints";
+
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+.app-title {
+  @include breakpoints.mobile {
+    display: none;
+  }
 }
 
 .mat-toolbar {
@@ -12,6 +20,10 @@
 
 .menu-spacer {
   margin-inline-start: 1.5rem;
+
+  @include breakpoints.mobile {
+    margin-inline-start: 0;
+  }
 }
 
 .spacer {
@@ -23,8 +35,7 @@
   display: flex;
   padding: 1.5rem;
 
-  // TODO
-  @media (max-width: 600px) {
+  @include breakpoints.mobile {
     padding: 1rem;
   }
 }
@@ -36,8 +47,7 @@
     justify-content: center;
     font-size: 0.875rem;
 
-    // TODO
-    @media (max-width: 600px) {
+    @include breakpoints.mobile {
       font-size: 0.75rem;
     }
   }

@@ -1,0 +1,19 @@
+// Based on Material Design's responsive layout guidelines
+
+@mixin mobile {
+  @media (max-width: 599.98px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: 600px) and (max-width: 959.98px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 960px) {
+    @content;
+  }
+}
