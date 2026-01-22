@@ -89,9 +89,9 @@ export const handlers = [
     }
 
     return HttpResponse.json([
-      {id: '1', name: 'Earth', currency: 'USD'},
-      {id: '2', name: 'Ulthar', currency: 'UTH'},
-      {id: '3', name: 'Javia', currency: 'JAV'},
+      {id: '1', name: 'Earth', currency: 'USD', locale: 'en-US'},
+      {id: '2', name: 'Ulthar', currency: 'UTH', locale: 'es-ES'},
+      {id: '3', name: 'Javia', currency: 'JAV', locale: 'en-US'},
     ])
   }),
 

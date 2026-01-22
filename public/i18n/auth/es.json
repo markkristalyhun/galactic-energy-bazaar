@@ -1,0 +1,12 @@
+{
+  "login": "Iniciar sesión",
+  "email": {
+    "title": "Correo electrónico",
+    "placeholder": "tu@correo.com"
+  },
+  "password": {
+    "title": "Contraseña",
+    "placeholder": "Introduce tu contraseña",
+    "hideAriaLabel": "Ocultar contraseña"
+  }
+}

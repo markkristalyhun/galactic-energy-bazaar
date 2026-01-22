@@ -4,5 +4,5 @@ export interface PlanetModel {
   id: string;
   name: string;
   currency: Currency;
-  language: string;
+  locale: string;
 }

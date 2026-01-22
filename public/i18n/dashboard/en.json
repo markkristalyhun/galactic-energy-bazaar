@@ -8,7 +8,7 @@
     "planet": "Planet",
     "transactionType": "Transaction type",
     "price": "Price",
-    "volume": "Volume",
+    "volume": "Volume (Zeta Joules)",
     "total": "Total",
     "transactionValue": "Sum transactions",
     "numberOfTransaction": "Number of transactions"

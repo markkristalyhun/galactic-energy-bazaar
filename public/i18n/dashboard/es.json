@@ -1,0 +1,16 @@
+{
+  "title": "Panel de control",
+  "transactions": "Transacciones",
+  "leaderboard": "Tabla de clasificación",
+  "table": {
+    "timeStamp": "Fecha y hora",
+    "product": "Producto",
+    "planet": "Planeta",
+    "transactionType": "Tipo de transacción",
+    "price": "Precio",
+    "volume": "Volumen (Zeta Julios)",
+    "total": "Total",
+    "transactionValue": "Suma de transacciones",
+    "numberOfTransaction": "Número de transacciones"
+  }
+}

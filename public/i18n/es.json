@@ -1,0 +1,37 @@
+{
+  "app": {
+    "title": "Bazar de Energía Galáctica",
+    "footer": "© 2026 Bazar de Energía Galáctica. Todos los derechos reservados."
+  },
+  "toolbar": {
+    "admin": "Administración",
+    "dashboard": "Panel de control"
+  },
+  "validation": {
+    "required": "{{field}} es obligatorio",
+    "enterValid": "Por favor, introduce un {{field}} válido"
+  },
+  "action": {
+    "close": "Cerrar"
+  },
+  "error": {
+    "unexpectedError": "Ha ocurrido un error inesperado",
+    "unauthorized": "No autorizado",
+    "invalidSession": "Sesión inválida",
+    "invalidCredentials": "Credenciales inválidas"
+  },
+  "forbidden": {
+    "accessDenied": "Acceso Denegado",
+    "haveNoPermission": "No tienes permisos para acceder a esta página.",
+    "help": "Si crees que esto es un error, por favor contacta con tu administrador del sistema.",
+    "goBack": "Volver",
+    "geHome": "Ir al Inicio"
+  },
+  "product": {
+    "ENERGY": "Energía"
+  },
+  "transaction": {
+    "BUY": "Comprar",
+    "SELL": "Vender"
+  }
+}

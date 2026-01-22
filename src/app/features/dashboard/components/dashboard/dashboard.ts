@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, computed, inject, input, LOCALE_ID} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, input} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
 import {CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
 import {
@@ -16,10 +16,11 @@ import {
 } from '@angular/cdk/table';
 import {TransactionModel} from '@core/transaction/models/transaction.model';
 import {LeaderboardModel} from '@core/transaction/models/leaderboard.model';
-import {TranslocoDirective} from '@jsverse/transloco';
+import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
 import {PlanetModel} from '@core/planet/models/planet.model';
-import {formatDate} from '@angular/common';
+import {formatDate, formatNumber} from '@angular/common';
 import {UserCurrencyPipe} from '@core/currency/pipes/user-currency.pipe';
+import {AuthenticationStore} from '@core/auth/stores/authentication.store';
 
 @Component({
   selector: 'app-dashboard',
@@ -48,8 +49,9 @@ import {UserCurrencyPipe} from '@core/currency/pipes/user-currency.pipe';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dashboard {
-  private locale = inject(LOCALE_ID);
+  private readonly authenticationStore = inject(AuthenticationStore);
   private readonly userCurrencyPipe = inject(UserCurrencyPipe);
+  private readonly translateService = inject(TranslocoService);
 
   public readonly transactions = input<TransactionModel[]>([]);
   public readonly leaderboardValues = input<LeaderboardModel[]>([]);
@@ -64,10 +66,13 @@ export class Dashboard {
   public readonly formattedTransactions = computed(() =>
     this.transactions().map(transaction => ({
       ...transaction,
-      time: formatDate(transaction.timeStamp, 'medium', this.locale), // TODO get locale from planet/user data
+      time: formatDate(transaction.timeStamp, 'medium', this.authenticationStore.userLocale()),
       planet: this.planetMap().get(transaction.planetId)?.name ?? transaction.planetId,
       formattedPricePerUnit: this.userCurrencyPipe.transform(transaction.pricePerUnit),
       sum: this.userCurrencyPipe.transform(transaction.volume * transaction.pricePerUnit),
+      formattedProduct: this.translateService.translate(`product.${transaction.product}`),
+      formattedTransactionType: this.translateService.translate(`transaction.${transaction.transactionType}`),
+      formattedVolume: formatNumber(transaction.volume, this.authenticationStore.userLocale(), '1.0-2'),
     }))
   );
 
@@ -76,6 +81,7 @@ export class Dashboard {
       ...leaderboardValue,
       planet: this.planetMap().get(leaderboardValue.planetId)?.name ?? leaderboardValue.planetId,
       sum: this.userCurrencyPipe.transform(leaderboardValue.sumTransactionValue),
+      formattedNumberOfTransactions: formatNumber(leaderboardValue.numberOfTransactions, this.authenticationStore.userLocale(), '1.0-2'),
     })),
   );
 

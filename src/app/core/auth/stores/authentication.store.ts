@@ -1,11 +1,12 @@
 import {UserModel} from '../models/user.model';
 import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
-import {computed, inject} from '@angular/core';
+import {computed, inject, LOCALE_ID} from '@angular/core';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {catchError, of, pipe, switchMap, tap} from 'rxjs';
 import {CredentialsModel} from '../models/credentials.model';
 import {AuthenticationService} from '../services/authentication.service';
 import {Router} from '@angular/router';
+import {PlanetStore} from '@core/planet/stores/planet.store';
 
 interface AuthenticationState {
   user: UserModel | null;
@@ -22,10 +23,30 @@ const initialState: AuthenticationState = {
 export const AuthenticationStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withComputed(({user}) => ({
-    isLoggedIn: computed(() => !!user()),
-    role: computed(() => user()?.role)
-  })),
+  withComputed(({user}) => {
+    const planetStore = inject(PlanetStore);
+    const defaultLocale = inject(LOCALE_ID);
+
+    return {
+      isLoggedIn: computed(() => !!user()),
+      role: computed(() => user()?.role),
+      userLocale: computed(() => {
+        const currentUser = user();
+        const planets = planetStore.planets();
+
+        if (!currentUser || !planets) {
+          return defaultLocale;
+        }
+
+        const userPlanet = planets.find(planet => planet.id === currentUser.planetId);
+        if (!userPlanet) {
+          return defaultLocale;
+        }
+
+        return userPlanet.locale;
+      })
+    };
+  }),
   withMethods((store) => {
     const authenticationService = inject(AuthenticationService);
     const router = inject(Router);

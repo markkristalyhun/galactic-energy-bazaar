@@ -26,5 +26,12 @@
     "help": "If you believe this is an error, please contact your system administrator.",
     "goBack": "Go Back",
     "geHome": "Go to Home"
+  },
+  "product": {
+    "ENERGY": "Energy"
+  },
+  "transaction": {
+    "BUY": "Buy",
+    "SELL": "Sell"
   }
 }

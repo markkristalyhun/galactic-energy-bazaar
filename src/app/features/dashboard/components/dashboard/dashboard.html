@@ -16,7 +16,7 @@
 
             <ng-container cdkColumnDef="product">
               <th cdk-header-cell *cdkHeaderCellDef>{{t('dashboard.table.product')}}</th>
-              <td cdk-cell *cdkCellDef="let element"> {{ element.product }}</td>
+              <td cdk-cell *cdkCellDef="let element"> {{ element.formattedProduct }}</td>
             </ng-container>
 
             <ng-container cdkColumnDef="planet">
@@ -26,7 +26,7 @@
 
             <ng-container cdkColumnDef="transactionType">
               <th cdk-header-cell *cdkHeaderCellDef>{{t('dashboard.table.transactionType')}}</th>
-              <td cdk-cell *cdkCellDef="let element"> {{ element.transactionType }}</td>
+              <td cdk-cell *cdkCellDef="let element"> {{ element.formattedTransactionType }}</td>
             </ng-container>
 
             <ng-container cdkColumnDef="pricePerUnit">
@@ -36,7 +36,7 @@
 
             <ng-container cdkColumnDef="volume">
               <th cdk-header-cell *cdkHeaderCellDef>{{t('dashboard.table.volume')}}</th>
-              <td cdk-cell *cdkCellDef="let element"> {{ element.volume }}</td>
+              <td cdk-cell *cdkCellDef="let element"> {{ element.formattedVolume }}</td>
             </ng-container>
 
             <ng-container cdkColumnDef="sum">
@@ -71,7 +71,7 @@
             </ng-container>
             <ng-container cdkColumnDef="transaction">
               <th cdk-header-cell *cdkHeaderCellDef>{{t('dashboard.table.numberOfTransaction')}}</th>
-              <td cdk-cell *cdkCellDef="let element">{{ element.numberOfTransactions }}</td>
+              <td cdk-cell *cdkCellDef="let element">{{ element.formattedNumberOfTransactions }}</td>
             </ng-container>
 
             <tr cdk-header-row *cdkHeaderRowDef="leaderboardDisplayedColumns"></tr>
