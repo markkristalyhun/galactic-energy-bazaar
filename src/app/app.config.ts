@@ -6,6 +6,7 @@ import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
 import {errorHandlerInterceptor} from '@core/interceptors/error-handler.interceptor';
+import {retryHttpInterceptor} from '@core/interceptors/retry.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(
       withInterceptors([
+        retryHttpInterceptor,
         errorHandlerInterceptor,
       ]),
     ),
