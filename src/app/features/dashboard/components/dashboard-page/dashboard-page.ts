@@ -4,6 +4,7 @@ import {Dashboard} from '../dashboard/dashboard';
 import {TransactionStore} from '@core/transaction/stores/transaction.store';
 import {DashboardSkeleton} from '../dashboard-skeleton/dashboard-skeleton';
 import {ErrorHandlerService} from '@core/error/services/error-handler.service';
+import {effectOnceIf} from 'ngxtension/effect-once-if';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -26,17 +27,15 @@ export class DashboardPage implements OnDestroy {
   protected readonly isLoading = this.planetStore.isLoading;
 
   constructor() {
-    // TODO
-    effect(() => {
-      if (!this.isLoading() && !this.transactionStore.connected()) {
+    effectOnceIf(
+      () => !this.isLoading() && !this.transactionStore.connected(),
+      () => {
         this.transactionStore.startWatching();
-      }
     });
 
     effect(() => {
       const transactionError = this.transactionStore.error();
       if (transactionError) {
-        console.log(transactionError);
         this.errorHandlerService.showError(transactionError);
       }
     });

@@ -34,6 +34,7 @@
     "@jsverse/transloco": "^8.2.0",
     "@ngrx/signals": "^21.0.1",
     "lodash-es": "^4.17.22",
+    "ngxtension": "^7.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -44,6 +45,7 @@
     "@types/lodash-es": "^4.17.12",
     "jsdom": "^27.1.0",
     "msw": "^2.12.7",
+    "ngxtension-plugin": "^7.0.2",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
   },
