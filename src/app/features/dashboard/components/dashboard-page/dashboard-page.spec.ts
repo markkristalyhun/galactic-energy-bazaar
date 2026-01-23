@@ -23,7 +23,8 @@ describe('DashboardPage', () => {
       leaderboardValues: signal([]),
       connected: signal(false),
       startWatching: vi.fn(),
-      stopWatching: vi.fn()
+      stopWatching: vi.fn(),
+      error: vi.fn(),
     };
 
     await TestBed.configureTestingModule({

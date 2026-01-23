@@ -4,21 +4,38 @@ import {Home} from './home';
 import {AuthenticationStore} from '@core/auth/stores/authentication.store';
 import {PlanetStore} from '@core/planet/stores/planet.store';
 import {TranslocoTestingModule} from '@jsverse/transloco';
+import {TransactionStore} from '@core/transaction/stores/transaction.store';
+import {CurrencyStore} from '@core/currency/stores/currency.store';
+import {ActivatedRoute} from '@angular/router';
 
 describe('Home', () => {
   let component: Home;
   let fixture: ComponentFixture<Home>;
   let mockAuthStore: any;
   let mockPlanetStore: any;
+  let mockTransactionStore: any;
+  let mockCurrencyStore: any;
   let compiled: HTMLElement;
 
   beforeEach(async () => {
     mockAuthStore = {
-      logout: vi.fn()
+      logout: vi.fn(),
+      role: vi.fn(),
     };
 
     mockPlanetStore = {
-      loadPlanets: vi.fn()
+      loadPlanets: vi.fn(),
+      reset: vi.fn(),
+    };
+
+    mockCurrencyStore = {
+      reset: vi.fn(),
+      startPolling: vi.fn(),
+      stopPolling: vi.fn(),
+    };
+
+    mockTransactionStore = {
+      reset: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
@@ -30,7 +47,15 @@ describe('Home', () => {
       ],
       providers: [
         { provide: AuthenticationStore, useValue: mockAuthStore },
-        { provide: PlanetStore, useValue: mockPlanetStore }
+        { provide: PlanetStore, useValue: mockPlanetStore },
+        { provide: TransactionStore, useValue: mockTransactionStore },
+        { provide: CurrencyStore, useValue: mockCurrencyStore },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {}
+          }
+        }
       ]
     }).compileComponents();
 

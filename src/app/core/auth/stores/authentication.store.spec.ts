@@ -1,18 +1,19 @@
-import {TestBed, tick} from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
-import { AuthenticationService } from '../services/authentication.service';
-import { UserModel } from '../models/user.model';
-import { CredentialsModel } from '../models/credentials.model';
+import {TestBed} from '@angular/core/testing';
+import {Router} from '@angular/router';
+import {of, throwError} from 'rxjs';
+import {AuthenticationService} from '../services/authentication.service';
+import {UserModel} from '../models/user.model';
+import {CredentialsModel} from '../models/credentials.model';
 import {AuthenticationStore} from '@core/auth/stores/authentication.store';
 import {patchState} from '@ngrx/signals';
+import {Role} from '@core/auth/models/role';
 
 describe('AuthenticationStore', () => {
   let store: any;
   let mockAuthService: any;
   let mockRouter: any;
 
-  const mockUser: UserModel = { id: '1', name: 'Test User', email: 'test@example.com', planetId: '1' } as UserModel;
+  const mockUser: UserModel = { id: '1', name: 'Test User', email: 'test@example.com', planetId: '1', role: Role.TRADER } as UserModel;
   const credentials: CredentialsModel = { email: 'test@example.com', password: 'password' };
 
   beforeEach(() => {

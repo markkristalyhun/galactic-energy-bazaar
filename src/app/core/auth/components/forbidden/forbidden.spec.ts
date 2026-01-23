@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Forbidden } from './forbidden';
+import {RouterModule} from '@angular/router';
+import {TranslocoTestingModule} from '@jsverse/transloco';
 
 describe('Forbidden', () => {
   let component: Forbidden;
@@ -8,7 +10,16 @@ describe('Forbidden', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Forbidden]
+      imports: [
+        Forbidden,
+        RouterModule,
+        TranslocoTestingModule,
+        TranslocoTestingModule.forRoot({
+          langs: {
+            en: {},
+          },
+        })
+      ]
     })
     .compileComponents();
 
