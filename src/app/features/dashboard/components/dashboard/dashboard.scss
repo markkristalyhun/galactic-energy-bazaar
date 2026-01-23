@@ -13,9 +13,11 @@
   max-width: 75rem;
   margin: 0 auto;
   flex: 1;
+  padding: 1rem;
 
   @include breakpoints.mobile {
     gap: 1rem;
+    padding: 0.75rem;
   }
 }
 
@@ -23,22 +25,112 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  background-color: var(--mat-sidenav-container-background-color, var(--mat-app-background, #1e1e1e));
+  color: var(--mat-sidenav-container-text-color, var(--mat-app-text-color, #e0e0e0));
+  overflow: hidden;
+
+  mat-card-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 0.0625rem solid var(--mat-divider-color, rgba(255, 255, 255, 0.12));
+
+    mat-card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--mat-toolbar-title-text-color, var(--mat-app-on-surface, #f5f5f5));
+    }
+  }
 
   mat-card-content {
     flex: 1;
+    padding: 0;
   }
 }
 
 .viewport-container {
   height: 100%;
+  overflow: auto;
+
+  // Custom scrollbar styling for dark mode
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--mat-table-background-color, #2a2a2a);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--mat-slider-inactive-track-color, rgba(255, 255, 255, 0.3));
+    border-radius: 0.25rem;
+
+    &:hover {
+      background: var(--mat-slider-hover-state-layer-color, rgba(255, 255, 255, 0.4));
+    }
+  }
 }
 
 .viewport-container table {
   width: 100%;
+  border-collapse: collapse;
+  background-color: var(--mat-table-background-color, #1e1e1e);
+  font-size: 0.875rem;
 }
 
-.viewport-container td,
 .viewport-container th {
-  height: 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--mat-table-header-headline-color, var(--mat-app-surface-container-high, #252525));
+  color: var(--mat-table-header-headline-color, var(--mat-app-on-surface-variant, #b0b0b0));
+  font-weight: 600;
   text-align: left;
+  padding: 0.5rem 1.25rem;
+  border-bottom: 0.125rem solid var(--mat-divider-color, rgba(255, 255, 255, 0.12));
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  height: auto;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3);
+}
+
+.viewport-container td {
+  padding: 0.875rem 1.25rem;
+  border-bottom: 0.0625rem solid var(--mat-divider-color, rgba(255, 255, 255, 0.12));
+  color: var(--mat-table-row-item-label-text-color, var(--mat-app-on-surface, #e0e0e0));
+  text-align: left;
+  height: auto;
+  transition: background-color 0.2s ease;
+}
+
+// Table row styling
+.viewport-container table tr[cdk-row] {
+  &:hover {
+    background-color: var(--mat-table-row-item-hover-state-layer-color, var(--mat-app-surface-container, rgba(255, 255, 255, 0.08)));
+  }
+
+  // Zebra striping for better readability
+  &:nth-child(even) {
+    background-color: var(--mat-app-surface-container-low, rgba(255, 255, 255, 0.04));
+
+    &:hover {
+      background-color: var(--mat-table-row-item-hover-state-layer-color, var(--mat-app-surface-container, rgba(255, 255, 255, 0.08)));
+    }
+  }
+
+  &:last-child td {
+    border-bottom: none;
+  }
+}
+
+// Mobile responsive adjustments
+@include breakpoints.mobile {
+  .viewport-container table {
+    font-size: 0.8125rem;
+  }
+
+  .viewport-container th,
+  .viewport-container td {
+    padding: 0.75rem 1rem;
+  }
 }

@@ -37,6 +37,10 @@ body {
 }
 /* You can add global styles to this file, and also import other style files */
 
+mat-toolbar {
+  --mat-toolbar-container-background-color: var(--mat-sys-primary-container);
+}
+
 .mat-mdc-snack-bar-container.error-snackbar {
   --mdc-snackbar-container-color: var(--mat-sys-error) !important;
   margin-bottom: 1.5rem !important;
