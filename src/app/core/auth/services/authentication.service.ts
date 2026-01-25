@@ -19,4 +19,10 @@ export class AuthenticationService {
   public logout(): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/logout`, null);
   }
+
+  public checkSession(): Observable<UserModel> {
+    return this.http.get<UserModel>(`${this.baseUrl}/session`, {
+      headers: { 'X-Skip-Error-Handler': 'true' }
+    });
+  }
 }

@@ -77,6 +77,31 @@ export const handlers = [
     );
   }),
 
+  http.get('/api/session', ({ cookies }) => {
+    const authToken = cookies['auth_token'];
+
+    if (!authToken) {
+      return unauthorizedError();
+    }
+
+    const session = sessionStore.getSessionByAuthToken(authToken);
+    if (!session) {
+      return invalidSessionError();
+    }
+
+    const user = users.find(u => u.id === session.userId);
+    if (!user) {
+      return invalidSessionError();
+    }
+
+    return HttpResponse.json({
+      id: user.id,
+      username: user.email,
+      planetId: user.planetId,
+      role: user.role
+    });
+  }),
+
   http.get('/api/planets', ({ cookies }) => {
     const authToken = cookies['auth_token'];
     if (!authToken) {

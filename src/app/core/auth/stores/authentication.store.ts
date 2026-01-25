@@ -87,6 +87,27 @@ export const AuthenticationStore = signalStore(
             router.navigateByUrl('/auth', { replaceUrl: true });
           })
         ),
+      ),
+      initializeSession: rxMethod<void>(
+        pipe(
+          tap(() => patchState(store, {isLoading: true, error: null})),
+          switchMap(() =>
+            authenticationService.checkSession().pipe(
+              catchError(() => {
+                // Silently fail - user is just not logged in
+                patchState(store, {isLoading: false});
+                return of(null);
+              })
+            )
+          ),
+          tap((result) => {
+            if (result) {
+              patchState(store, {user: result, isLoading: false});
+            } else {
+              patchState(store, {isLoading: false});
+            }
+          })
+        )
       )
     };
   }),

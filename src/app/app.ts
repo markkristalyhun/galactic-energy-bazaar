@@ -14,6 +14,9 @@ export class App {
   private readonly translocoService = inject(TranslocoService);
 
   constructor() {
+    // Initialize session on app load
+    this.authenticationStore.initializeSession();
+
     effect(() => {
       const isLoggedIn = this.authenticationStore.isLoggedIn();
       const userLocale = this.authenticationStore.userLocale();

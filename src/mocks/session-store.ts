@@ -8,7 +8,34 @@ interface Session {
 }
 
 class SessionStore {
-  private readonly sessions = new Map<string, Session>(); // authToken -> Session
+  private readonly STORAGE_KEY = 'msw_sessions';
+
+  constructor() {
+    // Load sessions from localStorage on initialization
+    this.loadFromStorage();
+  }
+
+  private loadFromStorage(): Map<string, Session> {
+    try {
+      const stored = localStorage.getItem(this.STORAGE_KEY);
+      if (stored) {
+        const sessionsArray = JSON.parse(stored) as [string, Session][];
+        return new Map(sessionsArray);
+      }
+    } catch (error) {
+      console.warn('Failed to load sessions from localStorage:', error);
+    }
+    return new Map();
+  }
+
+  private saveToStorage(sessions: Map<string, Session>): void {
+    try {
+      const sessionsArray = Array.from(sessions.entries());
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(sessionsArray));
+    } catch (error) {
+      console.warn('Failed to save sessions to localStorage:', error);
+    }
+  }
 
   createSession(userId: string, username: string): Session {
     const csrfToken = this.generateToken();
@@ -22,18 +49,22 @@ class SessionStore {
       createdAt: Date.now()
     };
 
-    // Use authToken as the key
-    this.sessions.set(authToken, session);
+    const sessions = this.loadFromStorage();
+    sessions.set(authToken, session);
+    this.saveToStorage(sessions);
 
     return session;
   }
 
   getSessionByAuthToken(authToken: string): Session | undefined {
-    return this.sessions.get(authToken);
+    const sessions = this.loadFromStorage();
+    return sessions.get(authToken);
   }
 
   deleteSession(authToken: string): void {
-    this.sessions.delete(authToken);
+    const sessions = this.loadFromStorage();
+    sessions.delete(authToken);
+    this.saveToStorage(sessions);
   }
 
   private generateToken(): string {

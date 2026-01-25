@@ -8,6 +8,11 @@ export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      // Skip error handling for requests marked as silent
+      if (req.headers.has('X-Skip-Error-Handler')) {
+        return throwError(() => error);
+      }
+
       let message = 'error.unexpectedError';
 
       if (error?.error?.message) {
