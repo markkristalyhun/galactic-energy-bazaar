@@ -7,6 +7,8 @@ import {CredentialsModel} from '../models/credentials.model';
 import {AuthenticationService} from '../services/authentication.service';
 import {Router} from '@angular/router';
 import {PlanetStore} from '@core/planet/stores/planet.store';
+import {CurrencyStore} from '@core/currency/stores/currency.store';
+import {TransactionService} from '@core/transaction/services/transaction.service';
 
 interface AuthenticationState {
   user: UserModel | null;
@@ -50,6 +52,27 @@ export const AuthenticationStore = signalStore(
   withMethods((store) => {
     const authenticationService = inject(AuthenticationService);
     const router = inject(Router);
+    const currencyStore = inject(CurrencyStore);
+    const planetStore = inject(PlanetStore);
+    const transactionService = inject(TransactionService);
+
+    /**
+     * Centralized cleanup for all stores and services when user session ends.
+     * This is called during logout, session expiry (401), or component cleanup.
+     */
+    const cleanupSession = () => {
+      // Stop active polling and connections
+      currencyStore.stopPolling();
+      transactionService.disconnect();
+
+      // Reset all stores to initial state
+      currencyStore.reset();
+      planetStore.reset();
+      transactionService.resetData();
+
+      // Clear authentication state
+      patchState(store, {user: null, isLoading: false, error: null});
+    };
 
     return {
       login: rxMethod<CredentialsModel>(
@@ -77,17 +100,25 @@ export const AuthenticationStore = signalStore(
           switchMap(() =>
             authenticationService.logout().pipe(
               catchError((error) => {
-                patchState(store, {isLoading: false, error, user: null})
+                patchState(store, {isLoading: false, error})
                 return of(null);
               })
             )
           ),
           tap(() => {
-            patchState(store, {user: null, isLoading: false});
+            cleanupSession();
             router.navigateByUrl('/auth', { replaceUrl: true });
           })
         ),
       ),
+      /**
+       * Clears the session without calling the backend API.
+       * Used when session is already invalid (e.g., 401 response from backend).
+       */
+      clearSession: () => {
+        cleanupSession();
+        router.navigateByUrl('/auth', { replaceUrl: true });
+      },
       initializeSession: rxMethod<void>(
         pipe(
           tap(() => patchState(store, {isLoading: true, error: null})),

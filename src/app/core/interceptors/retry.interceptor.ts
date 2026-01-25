@@ -1,4 +1,4 @@
-import {HttpInterceptorFn} from '@angular/common/http';
+import {HttpErrorResponse, HttpInterceptorFn} from '@angular/common/http';
 import {catchError, retry, throwError, timer} from 'rxjs';
 
 const RETRY_NUMBER = 2;
@@ -8,7 +8,13 @@ export const retryHttpInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     retry({
       count: RETRY_NUMBER,
-      delay: () => timer(RETRY_DELAY_MS),
+      delay: (error: HttpErrorResponse) => {
+        // Don't retry 401 Unauthorized - session is invalid
+        if (error.status === 401) {
+          throw error;
+        }
+        return timer(RETRY_DELAY_MS);
+      },
     }),
     catchError((error) => {
       console.error('Request failed after retries:', error);

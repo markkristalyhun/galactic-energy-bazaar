@@ -18,7 +18,8 @@
     "unexpectedError": "Ha ocurrido un error inesperado",
     "unauthorized": "No autorizado",
     "invalidSession": "Sesión inválida",
-    "invalidCredentials": "Credenciales inválidas"
+    "invalidCredentials": "Credenciales inválidas",
+    "sessionExpired": "Tu sesión ha expirado. Por favor, inicia sesión de nuevo."
   },
   "forbidden": {
     "accessDenied": "Acceso Denegado",

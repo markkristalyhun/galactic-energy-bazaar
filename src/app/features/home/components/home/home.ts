@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatToolbar} from "@angular/material/toolbar";
@@ -9,7 +9,6 @@ import {TranslocoDirective} from '@jsverse/transloco';
 import {HasRoleDirective} from '@core/auth/directives/has-role.directive';
 import {Role} from '@core/auth/models/role';
 import {CurrencyStore} from '@core/currency/stores/currency.store';
-import {TransactionService} from '@core/transaction/services/transaction.service';
 
 @Component({
   selector: 'app-home',
@@ -28,11 +27,10 @@ import {TransactionService} from '@core/transaction/services/transaction.service
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Home implements OnInit, OnDestroy {
+export class Home implements OnInit {
   private readonly authenticationStore = inject(AuthenticationStore);
   private readonly planetStore = inject(PlanetStore);
   private readonly currencyStore = inject(CurrencyStore);
-  private readonly transactionService = inject(TransactionService);
 
   protected readonly Role = Role;
 
@@ -42,13 +40,6 @@ export class Home implements OnInit, OnDestroy {
   }
 
   public onLogout() {
-    this.currencyStore.stopPolling();
     this.authenticationStore.logout();
-  }
-
-  ngOnDestroy() {
-    this.transactionService.resetData();
-    this.planetStore.reset();
-    this.currencyStore.reset();
   }
 }

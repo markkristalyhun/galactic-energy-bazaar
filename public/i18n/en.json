@@ -18,7 +18,8 @@
     "unexpectedError": "An unexpected error occurred",
     "unauthorized": "Unauthorized",
     "invalidSession": "Invalid session",
-    "invalidCredentials": "Invalid credentials"
+    "invalidCredentials": "Invalid credentials",
+    "sessionExpired": "Your session has expired. Please log in again."
   },
   "forbidden": {
     "accessDenied": "Access Denied",
