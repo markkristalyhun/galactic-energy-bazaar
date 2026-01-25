@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, computed, inject, input} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, input, viewChild} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
 import {CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
 import {
@@ -57,24 +57,13 @@ export class Dashboard {
   public readonly leaderboardValues = input<LeaderboardModel[]>([]);
   public readonly planets = input<PlanetModel[]>([]);
 
+  public readonly transactionsTable = viewChild<CdkTable<any>>('transactionsTable');
+
   private readonly planetMap = computed(() => {
     const planetMap = new Map<string, PlanetModel>();
     this.planets().forEach(planet => planetMap.set(planet.id, planet));
     return planetMap;
   });
-
-  public readonly formattedTransactions = computed(() =>
-    this.transactions().map(transaction => ({
-      ...transaction,
-      time: formatDate(transaction.timeStamp, 'medium', this.authenticationStore.userLocale()),
-      planet: this.planetMap().get(transaction.planetId)?.name ?? transaction.planetId,
-      formattedPricePerUnit: this.userCurrencyPipe.transform(transaction.pricePerUnit),
-      sum: this.userCurrencyPipe.transform(transaction.volume * transaction.pricePerUnit),
-      formattedProduct: this.translateService.translate(`product.${transaction.product}`),
-      formattedTransactionType: this.translateService.translate(`transaction.${transaction.transactionType}`),
-      formattedVolume: formatNumber(transaction.volume, this.authenticationStore.userLocale(), '1.0-2'),
-    }))
-  );
 
   public readonly formattedLeaderboardValues = computed(() =>
     this.leaderboardValues().map(leaderboardValue => ({
@@ -94,5 +83,26 @@ export class Dashboard {
 
   public leaderboardTrackBy(index: number, element: LeaderboardModel): string {
     return element.planetId;
+  }
+
+  public updateCalculatedTableData() {
+    this.transactions().forEach(transaction => {
+      const formattedData = {
+        time: formatDate(transaction.timeStamp, 'medium', this.authenticationStore.userLocale()),
+        planet: this.planetMap().get(transaction.planetId)?.name ?? transaction.planetId,
+        formattedPricePerUnit: this.userCurrencyPipe.transform(transaction.pricePerUnit),
+        sum: this.userCurrencyPipe.transform(transaction.volume * transaction.pricePerUnit),
+        formattedProduct: this.translateService.translate(`product.${transaction.product}`),
+        formattedTransactionType: this.translateService.translate(`transaction.${transaction.transactionType}`),
+        formattedVolume: formatNumber(transaction.volume, this.authenticationStore.userLocale(), '1.0-2'),
+      };
+
+      Object.assign(transaction, formattedData);
+    })
+  }
+
+  public refreshTableData() {
+    this.updateCalculatedTableData();
+    this.transactionsTable()?.renderRows();
   }
 }

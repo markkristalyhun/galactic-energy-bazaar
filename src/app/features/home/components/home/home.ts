@@ -9,7 +9,7 @@ import {TranslocoDirective} from '@jsverse/transloco';
 import {HasRoleDirective} from '@core/auth/directives/has-role.directive';
 import {Role} from '@core/auth/models/role';
 import {CurrencyStore} from '@core/currency/stores/currency.store';
-import {TransactionStore} from '@core/transaction/stores/transaction.store';
+import {TransactionService} from '@core/transaction/services/transaction.service';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +32,7 @@ export class Home implements OnInit, OnDestroy {
   private readonly authenticationStore = inject(AuthenticationStore);
   private readonly planetStore = inject(PlanetStore);
   private readonly currencyStore = inject(CurrencyStore);
-  private readonly transactionStore = inject(TransactionStore);
+  private readonly transactionService = inject(TransactionService);
 
   protected readonly Role = Role;
 
@@ -47,7 +47,7 @@ export class Home implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.transactionStore.reset();
+    this.transactionService.resetData();
     this.planetStore.reset();
     this.currencyStore.reset();
   }

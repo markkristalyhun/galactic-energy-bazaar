@@ -1,10 +1,13 @@
-import {ChangeDetectionStrategy, Component, computed, effect, inject, OnDestroy, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, effect, inject, OnDestroy, signal, viewChild} from '@angular/core';
 import {PlanetStore} from '@core/planet/stores/planet.store';
 import {Dashboard} from '../dashboard/dashboard';
-import {TransactionStore} from '@core/transaction/stores/transaction.store';
 import {DashboardSkeleton} from '../dashboard-skeleton/dashboard-skeleton';
 import {ErrorHandlerService} from '@core/error/services/error-handler.service';
-import {effectOnceIf} from 'ngxtension/effect-once-if';
+import {TransactionService} from '@core/transaction/services/transaction.service';
+import {TransactionModel} from '@core/transaction/models/transaction.model';
+import {combineLatest, filter, switchMap, take} from 'rxjs';
+import {takeUntilDestroyed, toObservable} from '@angular/core/rxjs-interop';
+import {LeaderboardModel} from '@core/transaction/models/leaderboard.model';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -18,23 +21,32 @@ import {effectOnceIf} from 'ngxtension/effect-once-if';
 })
 export class DashboardPage implements OnDestroy {
   private readonly planetStore = inject(PlanetStore);
-  private readonly transactionStore = inject(TransactionStore);
+  private readonly transactionService = inject(TransactionService);
   private readonly errorHandlerService = inject(ErrorHandlerService);
 
-  public readonly transactions = this.transactionStore.transactions;
-  public readonly leaderboardValues = this.transactionStore.leaderboardValues;
+  public readonly dashboard = viewChild(Dashboard);
+
+  public readonly transactions = signal<TransactionModel[]>([]);
+  public readonly leaderboardValues = signal<LeaderboardModel[]>([]);
   public readonly planets = this.planetStore.planets;
-  protected readonly isLoading = this.planetStore.isLoading;
+  public readonly isLoading = this.planetStore.isLoading;
+
+  protected readonly isLoading$ = toObservable(this.planetStore.isLoading);
 
   constructor() {
-    effectOnceIf(
-      () => !this.isLoading() && !this.transactionStore.connected(),
-      () => {
-        this.transactionStore.startWatching();
+    combineLatest([this.isLoading$, this.transactionService.isConnected]).pipe(
+      filter(([isLoading, isConnected]) => !isLoading && !isConnected),
+      take(1),
+      switchMap(() => this.transactionService.connect()),
+      takeUntilDestroyed(),
+    ).subscribe((data) => {
+      this.transactions.set(data.transactions);
+      this.leaderboardValues.set(data.leaderboardValues);
+      this.dashboard()?.refreshTableData();
     });
 
     effect(() => {
-      const transactionError = this.transactionStore.error();
+      const transactionError = this.transactionService.transactionError();
       if (transactionError) {
         this.errorHandlerService.showError(transactionError);
       }
@@ -42,6 +54,6 @@ export class DashboardPage implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.transactionStore.stopWatching();
+    this.transactionService.disconnect();
   }
 }

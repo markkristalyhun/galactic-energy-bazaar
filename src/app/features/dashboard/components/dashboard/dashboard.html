@@ -8,7 +8,7 @@
 
         <cdk-virtual-scroll-viewport class="viewport-container" [itemSize]="48" [maxBufferPx]="1200"
                                      [minBufferPx]="400">
-          <table cdk-table [dataSource]="formattedTransactions()" [trackBy]="transactionTrackBy" recycleRows>
+          <table #transactionsTable cdk-table [dataSource]="transactions()" [trackBy]="transactionTrackBy" recycleRows>
             <ng-container cdkColumnDef="time">
               <th cdk-header-cell *cdkHeaderCellDef>{{t('dashboard.table.timeStamp')}}</th>
               <td cdk-cell *cdkCellDef="let element"> {{ element.time }}</td>
