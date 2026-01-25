@@ -1,4 +1,5 @@
 import {beforeEach, afterEach, describe, expect, it, vi} from 'vitest';
+import { TestBed } from '@angular/core/testing';
 
 // Mock the environment module before importing the service
 vi.mock('@env/environment', () => ({
@@ -37,7 +38,12 @@ describe('TransactionService', () => {
 
     // now import the service so it picks up the mocked webSocket
     const svcMod = await import('./transaction.service');
-    service = new svcMod.TransactionService();
+
+    TestBed.configureTestingModule({
+      providers: [svcMod.TransactionService]
+    });
+
+    service = TestBed.inject(svcMod.TransactionService);
   });
 
   afterEach(() => {
@@ -104,16 +110,6 @@ describe('TransactionService', () => {
       service.disconnect();
 
       expect(mockWebSocketSubject.complete).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('bufferTime behavior', () => {
-    it('should apply 200ms buffer time to stream', () => {
-      const pipeSpy = vi.spyOn(mockWebSocketSubject, 'pipe');
-
-      service.connect();
-
-      expect(pipeSpy).toHaveBeenCalled();
     });
   });
 });

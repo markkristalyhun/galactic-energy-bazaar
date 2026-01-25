@@ -4,7 +4,6 @@ import {Home} from './home';
 import {AuthenticationStore} from '@core/auth/stores/authentication.store';
 import {PlanetStore} from '@core/planet/stores/planet.store';
 import {TranslocoTestingModule} from '@jsverse/transloco';
-import {TransactionStore} from '@core/transaction/stores/transaction.store';
 import {CurrencyStore} from '@core/currency/stores/currency.store';
 import {ActivatedRoute} from '@angular/router';
 
@@ -48,7 +47,6 @@ describe('Home', () => {
       providers: [
         { provide: AuthenticationStore, useValue: mockAuthStore },
         { provide: PlanetStore, useValue: mockPlanetStore },
-        { provide: TransactionStore, useValue: mockTransactionStore },
         { provide: CurrencyStore, useValue: mockCurrencyStore },
         {
           provide: ActivatedRoute,

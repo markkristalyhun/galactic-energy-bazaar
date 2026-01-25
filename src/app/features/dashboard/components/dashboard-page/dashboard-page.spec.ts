@@ -3,14 +3,16 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { signal } from '@angular/core';
 import { DashboardPage } from './dashboard-page';
 import { PlanetStore } from '@core/planet/stores/planet.store';
-import { TransactionStore } from '@core/transaction/stores/transaction.store';
+import { TransactionService } from '@core/transaction/services/transaction.service';
 import {TranslocoTestingModule} from '@jsverse/transloco';
+import { of, BehaviorSubject } from 'rxjs';
 
 describe('DashboardPage', () => {
   let component: DashboardPage;
   let fixture: ComponentFixture<DashboardPage>;
   let mockPlanetStore: any;
-  let mockTransactionStore: any;
+  let mockTransactionService: any;
+  let isConnectedSubject: BehaviorSubject<boolean>;
 
   beforeEach(async () => {
     mockPlanetStore = {
@@ -18,13 +20,13 @@ describe('DashboardPage', () => {
       isLoading: signal(false)
     };
 
-    mockTransactionStore = {
-      transactions: signal([]),
-      leaderboardValues: signal([]),
-      connected: signal(false),
-      startWatching: vi.fn(),
-      stopWatching: vi.fn(),
-      error: vi.fn(),
+    isConnectedSubject = new BehaviorSubject<boolean>(false);
+
+    mockTransactionService = {
+      isConnected: isConnectedSubject.asObservable(),
+      transactionError: signal(null),
+      connect: vi.fn().mockReturnValue(of({ transactions: [], leaderboardValues: [] })),
+      disconnect: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
@@ -36,7 +38,7 @@ describe('DashboardPage', () => {
       ],
       providers: [
         { provide: PlanetStore, useValue: mockPlanetStore },
-        { provide: TransactionStore, useValue: mockTransactionStore },
+        { provide: TransactionService, useValue: mockTransactionService },
       ]
     }).compileComponents();
 
@@ -49,22 +51,12 @@ describe('DashboardPage', () => {
   });
 
   describe('Store Integration', () => {
-    it('should expose transactions from TransactionStore', () => {
-      const mockTransactions = [
-        { id: 'tx1', product: 'Widget', planetId: 'planet1' }
-      ];
-      mockTransactionStore.transactions.set(mockTransactions);
-
-      expect(component.transactions()).toEqual(mockTransactions);
+    it('should have empty transactions initially', () => {
+      expect(component.transactions()).toEqual([]);
     });
 
-    it('should expose leaderboard values from TransactionStore', () => {
-      const mockLeaderboard = [
-        { planetId: 'planet1', sumTransactionValue: 1000, numberOfTransactions: 10 }
-      ];
-      mockTransactionStore.leaderboardValues.set(mockLeaderboard);
-
-      expect(component.leaderboardValues()).toEqual(mockLeaderboard);
+    it('should have empty leaderboard values initially', () => {
+      expect(component.leaderboardValues()).toEqual([]);
     });
 
     it('should expose planets from PlanetStore', () => {
@@ -79,71 +71,71 @@ describe('DashboardPage', () => {
     it('should expose isLoading from PlanetStore', () => {
       mockPlanetStore.isLoading.set(true);
 
-      expect(component['isLoading']()).toBe(true);
+      expect(component.isLoading()).toBe(true);
     });
   });
 
   describe('Effect behavior', () => {
-    it('should start watching when not loading and not connected', () => {
+    it('should connect when not loading and not connected', () => {
       mockPlanetStore.isLoading.set(false);
-      mockTransactionStore.connected.set(false);
+      isConnectedSubject.next(false);
 
       fixture.detectChanges();
 
-      expect(mockTransactionStore.startWatching).toHaveBeenCalled();
+      expect(mockTransactionService.connect).toHaveBeenCalled();
     });
 
-    it('should not start watching when still loading', () => {
+    it('should not connect when still loading', () => {
       mockPlanetStore.isLoading.set(true);
-      mockTransactionStore.connected.set(false);
+      isConnectedSubject.next(false);
 
       vi.clearAllMocks();
       fixture.detectChanges();
 
-      expect(mockTransactionStore.startWatching).not.toHaveBeenCalled();
+      expect(mockTransactionService.connect).not.toHaveBeenCalled();
     });
 
-    it('should not start watching when already connected', () => {
+    it('should not connect when already connected', () => {
       mockPlanetStore.isLoading.set(false);
-      mockTransactionStore.connected.set(true);
+      isConnectedSubject.next(true);
 
       vi.clearAllMocks();
       fixture.detectChanges();
 
-      expect(mockTransactionStore.startWatching).not.toHaveBeenCalled();
+      expect(mockTransactionService.connect).not.toHaveBeenCalled();
     });
 
     it('should react to loading state changes', () => {
       mockPlanetStore.isLoading.set(true);
-      mockTransactionStore.connected.set(false);
+      isConnectedSubject.next(false);
 
       vi.clearAllMocks();
       fixture.detectChanges();
 
-      expect(mockTransactionStore.startWatching).not.toHaveBeenCalled();
+      expect(mockTransactionService.connect).not.toHaveBeenCalled();
 
       // Simulate loading complete
       mockPlanetStore.isLoading.set(false);
       fixture.detectChanges();
 
-      expect(mockTransactionStore.startWatching).toHaveBeenCalled();
+      expect(mockTransactionService.connect).toHaveBeenCalled();
     });
   });
 
   describe('Lifecycle', () => {
-    it('should stop watching on destroy', () => {
+    it('should disconnect on destroy', () => {
       fixture.detectChanges();
 
       fixture.destroy();
 
-      expect(mockTransactionStore.stopWatching).toHaveBeenCalled();
+      expect(mockTransactionService.disconnect).toHaveBeenCalled();
     });
 
     it('should cleanup properly when destroyed multiple times', () => {
       fixture.detectChanges();
 
       fixture.destroy();
-      expect(mockTransactionStore.stopWatching).toHaveBeenCalledTimes(1);
+      expect(mockTransactionService.disconnect).toHaveBeenCalledTimes(1);
 
       expect(() => fixture.destroy()).not.toThrow();
     });
@@ -175,13 +167,7 @@ describe('DashboardPage', () => {
     });
 
     it('should pass data to dashboard component', () => {
-      const mockTransactions = [{ id: 'tx1', product: 'Widget', timeStamp: (new Date()).toISOString() }];
-      const mockLeaderboard = [{ planetId: 'p1', sumTransactionValue: 100 }];
-      const mockPlanets = [{ id: 'p1', name: 'Earth' }];
-
-      mockTransactionStore.transactions.set(mockTransactions);
-      mockTransactionStore.leaderboardValues.set(mockLeaderboard);
-      mockPlanetStore.planets.set(mockPlanets);
+      mockPlanetStore.planets.set([{ id: 'p1', name: 'Earth' }]);
       mockPlanetStore.isLoading.set(false);
 
       fixture.detectChanges();

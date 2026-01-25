@@ -39,6 +39,10 @@ describe('Dashboard', () => {
               'transaction.SELL': 'Sell'
             }
           },
+          translocoConfig: {
+            availableLangs: ['en'],
+            defaultLang: 'en',
+          }
         })
       ],
       providers: [
@@ -131,7 +135,7 @@ describe('Dashboard', () => {
     });
   });
 
-  describe('formattedTransactions computed signal', () => {
+  describe('updateCalculatedTableData', () => {
     it('should format transactions with planet names and calculated sum', () => {
       const mockPlanets: PlanetModel[] = [
         { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', }
@@ -151,14 +155,16 @@ describe('Dashboard', () => {
       fixture.componentRef.setInput('transactions', mockTransactions);
       fixture.detectChanges();
 
-      const formatted = component.formattedTransactions();
-      expect(formatted[0].planet).toBe('Earth');
-      expect(formatted[0].sum).toBe('$50.00');
-      expect(formatted[0].time).toBeDefined();
-      expect(formatted[0].formattedProduct).toBe('en.product.ENERGY');
-      expect(formatted[0].formattedTransactionType).toBe('en.transaction.BUY');
-      expect(formatted[0].formattedPricePerUnit).toBe('$10.00');
-      expect(formatted[0].formattedVolume).toBe('5');
+      component.updateCalculatedTableData();
+
+      const formatted = component.transactions();
+      expect((formatted[0] as any).planet).toBe('Earth');
+      expect((formatted[0] as any).sum).toBe('$50.00');
+      expect((formatted[0] as any).time).toBeDefined();
+      expect((formatted[0] as any).formattedProduct).toBe('Energy');
+      expect((formatted[0] as any).formattedTransactionType).toBe('Buy');
+      expect((formatted[0] as any).formattedPricePerUnit).toBe('$10.00');
+      expect((formatted[0] as any).formattedVolume).toBe('5');
     });
 
     it('should fallback to planetId when planet not found', () => {
@@ -175,8 +181,10 @@ describe('Dashboard', () => {
       fixture.componentRef.setInput('transactions', mockTransactions);
       fixture.detectChanges();
 
-      const formatted = component.formattedTransactions();
-      expect(formatted[0].planet).toBe('unknown');
+      component.updateCalculatedTableData();
+
+      const formatted = component.transactions();
+      expect((formatted[0] as any).planet).toBe('unknown');
     });
 
     it('should format multiple transactions correctly', () => {
@@ -210,12 +218,14 @@ describe('Dashboard', () => {
       fixture.componentRef.setInput('transactions', mockTransactions);
       fixture.detectChanges();
 
-      const formatted = component.formattedTransactions();
+      component.updateCalculatedTableData();
+
+      const formatted = component.transactions();
       expect(formatted).toHaveLength(2);
-      expect(formatted[0].planet).toBe('Earth');
-      expect(formatted[1].planet).toBe('Mars');
-      expect(formatted[0].sum).toBe('$50.00');
-      expect(formatted[1].sum).toBe('$60.00');
+      expect((formatted[0] as any).planet).toBe('Earth');
+      expect((formatted[1] as any).planet).toBe('Mars');
+      expect((formatted[0] as any).sum).toBe('$50.00');
+      expect((formatted[1] as any).sum).toBe('$60.00');
     });
 
     it('should format volume with correct decimal places', () => {
@@ -232,12 +242,14 @@ describe('Dashboard', () => {
       fixture.componentRef.setInput('transactions', mockTransactions);
       fixture.detectChanges();
 
-      const formatted = component.formattedTransactions();
-      expect(formatted[0].formattedVolume).toBe('5.46');
+      component.updateCalculatedTableData();
+
+      const formatted = component.transactions();
+      expect((formatted[0] as any).formattedVolume).toBe('5.46');
     });
 
     it('should return empty array when no transactions', () => {
-      const formatted = component.formattedTransactions();
+      const formatted = component.transactions();
       expect(formatted).toEqual([]);
     });
   });
@@ -411,7 +423,7 @@ describe('Dashboard', () => {
 
     it('should handle empty inputs gracefully', () => {
       expect(() => fixture.detectChanges()).not.toThrow();
-      expect(component.formattedTransactions()).toEqual([]);
+      expect(component.transactions()).toEqual([]);
       expect(component.formattedLeaderboardValues()).toEqual([]);
     });
   });
