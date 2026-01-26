@@ -126,12 +126,12 @@
 .climate-card {
   padding: 1rem;
   border-radius: 0.5rem;
-  border-left: 0.25rem solid var(--mdc-theme-primary, #1976d2);
-  background-color: var(--mdc-theme-surface-variant, rgba(0, 0, 0, 0.05));
+  border-left: 0.25rem solid var(--mat-sys-primary);
+  background-color: var(--mat-sys-surface-container);
 
   h4 {
     margin: 0 0 0.75rem 0;
-    color: var(--mdc-theme-primary, #1976d2);
+    color: var(--mat-sys-primary);
   }
 
   .climate-details {
@@ -155,7 +155,7 @@
 .energy-item {
   padding: 1rem;
   border-radius: 0.5rem;
-  background-color: var(--mdc-theme-surface-variant, rgba(0, 0, 0, 0.05));
+  background-color: var(--mat-sys-surface-container);
 
   .energy-header {
     display: flex;
@@ -184,7 +184,7 @@
 
   .progress-fill {
     height: 100%;
-    background: var(--mdc-theme-primary, #1976d2);
+    background: var(--mat-sys-primary);
     transition: width 0.3s ease;
   }
 }
@@ -223,20 +223,5 @@
 
   .climate-grid {
     grid-template-columns: 1fr;
-  }
-}
-
-// Dark mode support
-@media (prefers-color-scheme: dark) {
-  .climate-card {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .energy-item {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .progress-bar {
-    background-color: rgba(255, 255, 255, 0.1);
   }
 }
