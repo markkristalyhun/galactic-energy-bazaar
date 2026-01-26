@@ -23,6 +23,158 @@ const invalidSessionError = () => HttpResponse.json(
 
 const transactionSocket = ws.link('ws://localhost:4200/api/transactions');
 
+// Mock planet data with translation keys
+const mockPlanets = [
+  {
+    id: '1',
+    name: 'Earth',
+    currency: 'USD',
+    locale: 'en-US',
+    weather: 'planet.weatherConditions.temperate',
+    population: 7900000000,
+    sector: 'planet.sectors.alpha',
+    climateZones: [
+      {
+        zone: 'planet.zones.equatorial',
+        temperature: 28,
+        humidity: 75,
+        condition: 'planet.climateConditions.humid'
+      },
+      {
+        zone: 'planet.zones.temperate',
+        temperature: 15,
+        humidity: 60,
+        condition: 'planet.climateConditions.mild'
+      },
+      {
+        zone: 'planet.zones.polar',
+        temperature: -10,
+        humidity: 40,
+        condition: 'planet.climateConditions.harsh'
+      }
+    ],
+    energySources: [
+      {
+        source: 'planet.energySources.solar',
+        output: '450 Zeta Joules',
+        percentage: 35
+      },
+      {
+        source: 'planet.energySources.nuclear',
+        output: '380 Zeta Joules',
+        percentage: 30
+      },
+      {
+        source: 'planet.energySources.wind',
+        output: '280 Zeta Joules',
+        percentage: 22
+      },
+      {
+        source: 'planet.energySources.hydroelectric',
+        output: '165 Zeta Joules',
+        percentage: 13
+      }
+    ]
+  },
+  {
+    id: '2',
+    name: 'Ulthar',
+    currency: 'UTH',
+    locale: 'es-ES',
+    weather: 'planet.weatherConditions.arid',
+    population: 4200000000,
+    sector: 'planet.sectors.gamma',
+    climateZones: [
+      {
+        zone: 'planet.zones.north',
+        temperature: 35,
+        humidity: 20,
+        condition: 'planet.climateConditions.dry'
+      },
+      {
+        zone: 'planet.zones.south',
+        temperature: 42,
+        humidity: 15,
+        condition: 'planet.climateConditions.extreme'
+      },
+      {
+        zone: 'planet.zones.central',
+        temperature: 38,
+        humidity: 18,
+        condition: 'planet.climateConditions.harsh'
+      }
+    ],
+    energySources: [
+      {
+        source: 'planet.energySources.solar',
+        output: '850 Zeta Joules',
+        percentage: 60
+      },
+      {
+        source: 'planet.energySources.fusion',
+        output: '425 Zeta Joules',
+        percentage: 30
+      },
+      {
+        source: 'planet.energySources.geothermal',
+        output: '142 Zeta Joules',
+        percentage: 10
+      }
+    ]
+  },
+  {
+    id: '3',
+    name: 'Javia',
+    currency: 'JAV',
+    locale: 'en-US',
+    weather: 'planet.weatherConditions.variable',
+    population: 6500000000,
+    sector: 'planet.sectors.beta',
+    climateZones: [
+      {
+        zone: 'planet.zones.east',
+        temperature: 22,
+        humidity: 65,
+        condition: 'planet.climateConditions.pleasant'
+      },
+      {
+        zone: 'planet.zones.west',
+        temperature: 18,
+        humidity: 70,
+        condition: 'planet.climateConditions.mild'
+      },
+      {
+        zone: 'planet.zones.central',
+        temperature: 20,
+        humidity: 68,
+        condition: 'planet.climateConditions.stable'
+      }
+    ],
+    energySources: [
+      {
+        source: 'planet.energySources.antimatter',
+        output: '720 Zeta Joules',
+        percentage: 45
+      },
+      {
+        source: 'planet.energySources.fusion',
+        output: '560 Zeta Joules',
+        percentage: 35
+      },
+      {
+        source: 'planet.energySources.plasma',
+        output: '240 Zeta Joules',
+        percentage: 15
+      },
+      {
+        source: 'planet.energySources.solar',
+        output: '80 Zeta Joules',
+        percentage: 5
+      }
+    ]
+  }
+];
+
 export const handlers = [
   http.post<any, {email: string, password: string}>('/api/login', async ({ request }) => {
     const { email, password } = await request.json();
@@ -118,6 +270,30 @@ export const handlers = [
       {id: '2', name: 'Ulthar', currency: 'UTH', locale: 'es-ES'},
       {id: '3', name: 'Javia', currency: 'JAV', locale: 'en-US'},
     ])
+  }),
+
+  http.get('/api/planets/:planetId', ({ cookies, params }) => {
+    const authToken = cookies['auth_token'];
+    if (!authToken) {
+      return unauthorizedError();
+    }
+
+    const session = sessionStore.getSessionByAuthToken(authToken);
+    if (!session) {
+      return invalidSessionError();
+    }
+
+    const { planetId } = params;
+    const planet = mockPlanets.find(p => p.id === planetId);
+
+    if (!planet) {
+      return HttpResponse.json(
+        { message: 'error.planetNotFound' },
+        { status: 404 }
+      );
+    }
+
+    return HttpResponse.json(planet);
   }),
 
   http.get('/api/rates', ({request}) => {

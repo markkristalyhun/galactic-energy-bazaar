@@ -1,0 +1,84 @@
+<div class="planet-container" *transloco="let t">
+  <div class="header">
+    <h1>{{ planet().name }}</h1>
+  </div>
+
+  <div class="planet-info-cards">
+    <mat-card class="general-info">
+      <mat-card-header>
+        <mat-card-title>{{ t('planet.generalInformation') }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">{{ t('planet.currency') }}:</span>
+            <span class="value">{{ planet().currency }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">{{ t('planet.weather') }}:</span>
+            <span class="value">{{ t(planet().weather) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">{{ t('planet.population') }}:</span>
+            <span class="value">{{ planet().population | number: '1.0-0' : locale() }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">{{ t('planet.sector') }}:</span>
+            <span class="value">{{ t(planet().sector) }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="tabs-container">
+      <mat-card-content>
+        <mat-tab-group>
+          <mat-tab [label]="t('planet.tabs.climate')">
+            <div class="tab-content">
+              <h3>{{ t('planet.climate.title') }}</h3>
+              <div class="climate-grid">
+                @for (zone of planet().climateZones; track zone.zone) {
+                  <div class="climate-card">
+                    <h4>{{ t(zone.zone) }}</h4>
+                    <div class="climate-details">
+                      <p><strong>{{ t('planet.climate.temperature') }}:</strong> {{ zone.temperature }}</p>
+                      <p><strong>{{ t('planet.climate.humidity') }}:</strong> {{ zone.humidity }}%</p>
+                      <p><strong>{{ t('planet.climate.condition') }}:</strong> {{ t(zone.condition) }}</p>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab [label]="t('planet.tabs.energyConsumption')">
+            <div class="tab-content">
+              <h3>{{ t('planet.energy.title') }}</h3>
+              <div class="energy-list">
+                @for (energy of planet().energySources; track energy.source) {
+                  <div class="energy-item">
+                    <div class="energy-header">
+                      <h4>{{ t(energy.source) }}</h4>
+                      <mat-chip>{{ energy.percentage }}%</mat-chip>
+                    </div>
+                    <p class="energy-output">{{ t('planet.energy.output') }}: {{ energy.output }}</p>
+                    <div class="progress-bar">
+                      <div class="progress-fill" [style.width.%]="energy.percentage"></div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab [label]="t('planet.tabs.tradeHistory')">
+            <div class="tab-content">
+              <h3>{{ t('planet.trade.title') }}</h3>
+              <p class="placeholder-text">{{ t('planet.trade.placeholder') }}</p>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -123,6 +123,19 @@
   }
 }
 
+.leaderboard-row {
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    background-color: var(--mat-table-row-item-hover-state-layer-color, var(--mat-app-surface-container, rgba(255, 255, 255, 0.12))) !important;
+  }
+
+  &:active {
+    background-color: var(--mat-app-surface-container-high, rgba(255, 255, 255, 0.16)) !important;
+  }
+}
+
 // Mobile responsive adjustments
 @include breakpoints.mobile {
   .viewport-container table {

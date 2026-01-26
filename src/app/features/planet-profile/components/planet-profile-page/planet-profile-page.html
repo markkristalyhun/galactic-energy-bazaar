@@ -1,0 +1,8 @@
+@if (isLoading()) {
+  <div>Loading planet information...</div>
+} @else if (planetInfo()) {
+  <app-planet-info
+    [planet]="planetInfo()!"
+    [locale]="userLocale()"
+  ></app-planet-info>
+}

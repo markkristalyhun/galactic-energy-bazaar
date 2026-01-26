@@ -1,0 +1,72 @@
+{
+  "generalInformation": "Información General",
+  "currency": "Moneda",
+  "weather": "Clima",
+  "population": "Población",
+  "sector": "Sector",
+  "tabs": {
+    "climate": "Clima",
+    "energyConsumption": "Consumo de Energía",
+    "tradeHistory": "Historial Comercial"
+  },
+  "climate": {
+    "title": "Zonas Climáticas",
+    "zone": "Zona",
+    "temperature": "Temperatura",
+    "humidity": "Humedad",
+    "condition": "Condición"
+  },
+  "energy": {
+    "title": "Fuentes de Energía",
+    "source": "Fuente",
+    "output": "Producción",
+    "percentage": "Porcentaje"
+  },
+  "trade": {
+    "title": "Registros Comerciales",
+    "placeholder": "Los datos del historial comercial se mostrarán aquí."
+  },
+  "weatherConditions": {
+    "temperate": "Templado",
+    "arid": "Árido",
+    "tropical": "Tropical",
+    "frozen": "Congelado",
+    "variable": "Variable"
+  },
+  "sectors": {
+    "alpha": "Cuadrante Alfa",
+    "beta": "Cuadrante Beta",
+    "gamma": "Cuadrante Gamma",
+    "delta": "Cuadrante Delta",
+    "omega": "Sector Omega"
+  },
+  "climateConditions": {
+    "stable": "Estable",
+    "mild": "Suave",
+    "harsh": "Severo",
+    "extreme": "Extremo",
+    "pleasant": "Agradable",
+    "dry": "Seco",
+    "humid": "Húmedo"
+  },
+  "energySources": {
+    "solar": "Solar",
+    "nuclear": "Nuclear",
+    "fusion": "Fusión",
+    "geothermal": "Geotérmica",
+    "wind": "Eólica",
+    "hydroelectric": "Hidroeléctrica",
+    "antimatter": "Antimateria",
+    "plasma": "Plasma"
+  },
+  "zones": {
+    "north": "Región Norte",
+    "south": "Región Sur",
+    "east": "Región Este",
+    "west": "Región Oeste",
+    "central": "Región Central",
+    "polar": "Región Polar",
+    "equatorial": "Región Ecuatorial",
+    "temperate": "Zona Templada"
+  }
+}

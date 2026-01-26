@@ -16,6 +16,11 @@ export const HOME_ROUTES: Routes = [
     loadChildren: () => import('../dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES),
   },
   {
+    path: 'planets',
+    component: Home,
+    loadChildren: () => import('../planet-profile/planet-profile.routes').then(m => m.PLANET_PROFILE_ROUTES),
+  },
+  {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full'

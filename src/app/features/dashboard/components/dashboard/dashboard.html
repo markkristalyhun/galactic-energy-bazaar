@@ -75,7 +75,9 @@
             </ng-container>
 
             <tr cdk-header-row *cdkHeaderRowDef="leaderboardDisplayedColumns"></tr>
-            <tr cdk-row *cdkRowDef="let row; columns: leaderboardDisplayedColumns;"></tr>
+            <tr cdk-row *cdkRowDef="let row; columns: leaderboardDisplayedColumns;"
+                (dblclick)="onLeaderboardRowDoubleClick(row.planetId)"
+                class="leaderboard-row"></tr>
           </table>
         </cdk-virtual-scroll-viewport>
 

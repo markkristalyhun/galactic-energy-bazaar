@@ -1,7 +1,8 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
-import {PlanetModel} from '@core/planet/models/planet.model';
+import {PlanetModel, PlanetSimpleModel} from '@core/planet/models/planet.model';
+import {environment} from '@env/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,11 @@ import {PlanetModel} from '@core/planet/models/planet.model';
 export class PlanetService {
   private readonly http = inject(HttpClient);
 
-  public loadPlanets(): Observable<PlanetModel[]> {
-    return this.http.get<PlanetModel[]>('/api/planets');
+  public loadPlanets(): Observable<PlanetSimpleModel[]> {
+    return this.http.get<PlanetModel[]>(`${environment.apiUrl}/planets`);
+  }
+
+  public loadPlanetById(planetId: string): Observable<PlanetModel | null> {
+    return this.http.get<PlanetModel>(`${environment.apiUrl}/planets/${planetId}`);
   }
 }

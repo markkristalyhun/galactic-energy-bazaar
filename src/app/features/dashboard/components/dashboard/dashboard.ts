@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, input, viewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, input, viewChild} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
 import {CdkFixedSizeVirtualScroll, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
 import {
@@ -17,10 +17,11 @@ import {
 import {TransactionModel} from '@core/transaction/models/transaction.model';
 import {LeaderboardModel} from '@core/transaction/models/leaderboard.model';
 import {TranslocoDirective, TranslocoService} from '@jsverse/transloco';
-import {PlanetModel} from '@core/planet/models/planet.model';
+import {PlanetSimpleModel} from '@core/planet/models/planet.model';
 import {formatDate, formatNumber} from '@angular/common';
 import {UserCurrencyPipe} from '@core/currency/pipes/user-currency.pipe';
 import {AuthenticationStore} from '@core/auth/stores/authentication.store';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -52,15 +53,16 @@ export class Dashboard {
   private readonly authenticationStore = inject(AuthenticationStore);
   private readonly userCurrencyPipe = inject(UserCurrencyPipe);
   private readonly translateService = inject(TranslocoService);
+  private readonly router = inject(Router);
 
   public readonly transactions = input<TransactionModel[]>([]);
   public readonly leaderboardValues = input<LeaderboardModel[]>([]);
-  public readonly planets = input<PlanetModel[]>([]);
+  public readonly planets = input<PlanetSimpleModel[]>([]);
 
   public readonly transactionsTable = viewChild<CdkTable<any>>('transactionsTable');
 
   private readonly planetMap = computed(() => {
-    const planetMap = new Map<string, PlanetModel>();
+    const planetMap = new Map<string, PlanetSimpleModel>();
     this.planets().forEach(planet => planetMap.set(planet.id, planet));
     return planetMap;
   });
@@ -104,5 +106,9 @@ export class Dashboard {
   public refreshTableData() {
     this.updateCalculatedTableData();
     this.transactionsTable()?.renderRows();
+  }
+
+  public onLeaderboardRowDoubleClick(planetId: string): void {
+    this.router.navigate(['/planets', planetId]);
   }
 }
