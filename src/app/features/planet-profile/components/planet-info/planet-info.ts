@@ -5,6 +5,8 @@ import {MatChipsModule} from '@angular/material/chips';
 import {CommonModule} from '@angular/common';
 import {TranslocoDirective} from '@jsverse/transloco';
 import {PlanetModel} from '@core/planet/models/planet.model';
+import {IsUserPlanetDirective} from '@core/auth/directives/is-user-planet.directive';
+import {TemperatureUnitPipe} from '@core/planet/pipes/temperature-unit.pipe';
 
 @Component({
   selector: 'app-planet-info',
@@ -14,7 +16,9 @@ import {PlanetModel} from '@core/planet/models/planet.model';
     MatTabsModule,
     MatCardModule,
     MatChipsModule,
-    TranslocoDirective
+    TranslocoDirective,
+    IsUserPlanetDirective,
+    TemperatureUnitPipe
   ],
   templateUrl: './planet-info.html',
   styleUrls: ['./planet-info.scss'],

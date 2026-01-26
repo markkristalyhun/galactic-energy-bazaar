@@ -41,7 +41,7 @@
                   <div class="climate-card">
                     <h4>{{ t(zone.zone) }}</h4>
                     <div class="climate-details">
-                      <p><strong>{{ t('planet.climate.temperature') }}:</strong> {{ zone.temperature }}</p>
+                      <p><strong>{{ t('planet.climate.temperature') }}:</strong> {{ zone.temperature | temperatureUnit:planet().temperatureUnit }}</p>
                       <p><strong>{{ t('planet.climate.humidity') }}:</strong> {{ zone.humidity }}%</p>
                       <p><strong>{{ t('planet.climate.condition') }}:</strong> {{ t(zone.condition) }}</p>
                     </div>
@@ -71,7 +71,9 @@
             </div>
           </mat-tab>
 
-          <mat-tab [label]="t('planet.tabs.tradeHistory')">
+          <mat-tab
+            *appIsUserPlanet="planet().id"
+            [label]="t('planet.tabs.tradeHistory')">
             <div class="tab-content">
               <h3>{{ t('planet.trade.title') }}</h3>
               <p class="placeholder-text">{{ t('planet.trade.placeholder') }}</p>

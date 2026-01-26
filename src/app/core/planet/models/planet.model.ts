@@ -1,5 +1,11 @@
 import {Currency} from '@core/currency/models/currency';
 
+export enum TemperatureUnit {
+  CELSIUS = 'CELSIUS',
+  FAHRENHEIT = 'FAHRENHEIT',
+  KELVIN = 'KELVIN'
+}
+
 export interface PlanetClimateModel {
   zone: string;
   temperature: number;
@@ -18,6 +24,7 @@ export interface PlanetSimpleModel {
   name: string;
   currency: Currency;
   locale: string;
+  temperatureUnit: TemperatureUnit;
 }
 
 export interface PlanetModel extends PlanetSimpleModel {
