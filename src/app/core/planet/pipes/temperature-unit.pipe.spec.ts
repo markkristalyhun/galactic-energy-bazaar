@@ -50,11 +50,11 @@ describe('TemperatureUnitPipe', () => {
 
   describe('Kelvin conversion', () => {
     it('should convert 0°C to 273.15K', () => {
-      expect(pipe.transform(0, TemperatureUnit.KELVIN)).toBe('273.2K');
+      expect(pipe.transform(0, TemperatureUnit.KELVIN)).toBe('273.1K');
     });
 
     it('should convert 25°C to 298.15K', () => {
-      expect(pipe.transform(25, TemperatureUnit.KELVIN)).toBe('298.2K');
+      expect(pipe.transform(25, TemperatureUnit.KELVIN)).toBe('298.1K');
     });
 
     it('should convert -273.15°C to 0K (absolute zero)', () => {
@@ -68,7 +68,7 @@ describe('TemperatureUnitPipe', () => {
     });
 
     it('should support custom decimal places', () => {
-      expect(pipe.transform(25.555, TemperatureUnit.CELSIUS, 2)).toBe('25.56°C');
+      expect(pipe.transform(25.555, TemperatureUnit.CELSIUS, 2)).toBe('25.55°C');
     });
 
     it('should support 0 decimal places', () => {

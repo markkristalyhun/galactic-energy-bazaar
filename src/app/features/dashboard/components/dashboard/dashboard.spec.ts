@@ -3,7 +3,7 @@ import {beforeEach, describe, expect, it} from 'vitest';
 import {Dashboard} from './dashboard';
 import {LOCALE_ID, signal} from '@angular/core';
 import {TranslocoTestingModule} from '@jsverse/transloco';
-import {PlanetModel} from '@core/planet/models/planet.model';
+import {PlanetModel, TemperatureUnit} from '@core/planet/models/planet.model';
 import {TransactionModel, TransactionType} from '@core/transaction/models/transaction.model';
 import {LeaderboardModel} from '@core/transaction/models/leaderboard.model';
 import {ProductType} from '@core/transaction/models/product.model';
@@ -96,8 +96,8 @@ describe('Dashboard', () => {
   describe('planetMap computed signal', () => {
     it('should create a map of planets by id', () => {
       const mockPlanets: PlanetModel[] = [
-        { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', },
-        { id: 'planet2', name: 'Mars', currency: Currency.USD, locale: 'en-US', }
+        { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', temperatureUnit: TemperatureUnit.CELSIUS, weather: 'Clear', climateZones: [], population: 1000000, sector: 'Alpha', energySources: [] },
+        { id: 'planet2', name: 'Mars', currency: Currency.USD, locale: 'en-US', temperatureUnit: TemperatureUnit.CELSIUS, weather: 'Clear', climateZones: [], population: 1000000, sector: 'Alpha', energySources: [] }
       ];
 
       fixture.componentRef.setInput('planets', mockPlanets);
@@ -115,7 +115,7 @@ describe('Dashboard', () => {
     });
 
     it('should update when planets input changes', () => {
-      const mockPlanets1: PlanetModel[] = [{ id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', }];
+      const mockPlanets1: PlanetModel[] = [{ id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', temperatureUnit: TemperatureUnit.CELSIUS, weather: 'Clear', climateZones: [], population: 1000000, sector: 'Alpha', energySources: [] }];
       fixture.componentRef.setInput('planets', mockPlanets1);
       fixture.detectChanges();
 
@@ -123,9 +123,9 @@ describe('Dashboard', () => {
       expect(planetMap.size).toBe(1);
 
       const mockPlanets2: PlanetModel[] = [
-        { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', },
-        { id: 'planet2', name: 'Mars', currency: Currency.USD, locale: 'en-US', },
-        { id: 'planet3', name: 'Venus', currency: Currency.USD, locale: 'es-ES', }
+        { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', temperatureUnit: TemperatureUnit.CELSIUS, weather: 'Clear', climateZones: [], population: 1000000, sector: 'Alpha', energySources: [] },
+        { id: 'planet2', name: 'Mars', currency: Currency.USD, locale: 'en-US', temperatureUnit: TemperatureUnit.CELSIUS, weather: 'Clear', climateZones: [], population: 1000000, sector: 'Alpha', energySources: [] },
+        { id: 'planet3', name: 'Venus', currency: Currency.USD, locale: 'es-ES', temperatureUnit: TemperatureUnit.CELSIUS, weather: 'Clear', climateZones: [], population: 1000000, sector: 'Alpha', energySources: [] }
       ];
       fixture.componentRef.setInput('planets', mockPlanets2);
       fixture.detectChanges();
@@ -138,7 +138,7 @@ describe('Dashboard', () => {
   describe('updateCalculatedTableData', () => {
     it('should format transactions with planet names and calculated sum', () => {
       const mockPlanets: PlanetModel[] = [
-        { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', }
+        { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', temperatureUnit: TemperatureUnit.CELSIUS, weather: 'Clear', climateZones: [], population: 1000000, sector: 'Alpha', energySources: [] }
       ];
 
       const mockTransactions: TransactionModel[] = [{
@@ -189,8 +189,8 @@ describe('Dashboard', () => {
 
     it('should format multiple transactions correctly', () => {
       const mockPlanets: PlanetModel[] = [
-        { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', },
-        { id: 'planet2', name: 'Mars', currency: Currency.USD, locale: 'en-US', }
+        { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', temperatureUnit: TemperatureUnit.CELSIUS, weather: 'Clear', climateZones: [], population: 1000000, sector: 'Alpha', energySources: [] },
+        { id: 'planet2', name: 'Mars', currency: Currency.USD, locale: 'en-US', temperatureUnit: TemperatureUnit.CELSIUS, weather: 'Clear', climateZones: [], population: 1000000, sector: 'Alpha', energySources: [] }
       ];
 
       const mockTransactions: TransactionModel[] = [
@@ -257,7 +257,7 @@ describe('Dashboard', () => {
   describe('formattedLeaderboardValues computed signal', () => {
     it('should format leaderboard with planet names', () => {
       const mockPlanets: PlanetModel[] = [
-        { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', }
+        { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', temperatureUnit: TemperatureUnit.CELSIUS, weather: 'Clear', climateZones: [], population: 1000000, sector: 'Alpha', energySources: [] }
       ];
 
       const mockLeaderboard: LeaderboardModel[] = [{
@@ -293,9 +293,9 @@ describe('Dashboard', () => {
 
     it('should format multiple leaderboard entries', () => {
       const mockPlanets: PlanetModel[] = [
-        { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', },
-        { id: 'planet2', name: 'Mars', currency: Currency.USD, locale: 'en-US', },
-        { id: 'planet3', name: 'Venus', currency: Currency.USD, locale: 'en-US', }
+        { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', temperatureUnit: TemperatureUnit.CELSIUS, weather: 'Clear', climateZones: [], population: 1000000, sector: 'Alpha', energySources: [] },
+        { id: 'planet2', name: 'Mars', currency: Currency.USD, locale: 'en-US', temperatureUnit: TemperatureUnit.CELSIUS, weather: 'Clear', climateZones: [], population: 1000000, sector: 'Alpha', energySources: [] },
+        { id: 'planet3', name: 'Venus', currency: Currency.USD, locale: 'en-US', temperatureUnit: TemperatureUnit.CELSIUS, weather: 'Clear', climateZones: [], population: 1000000, sector: 'Alpha', energySources: [] }
       ];
 
       const mockLeaderboard: LeaderboardModel[] = [
@@ -397,7 +397,7 @@ describe('Dashboard', () => {
   describe('component integration', () => {
     it('should render without errors when all inputs provided', () => {
       const mockPlanets: PlanetModel[] = [
-        { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', }
+        { id: 'planet1', name: 'Earth', currency: Currency.USD, locale: 'en-US', temperatureUnit: TemperatureUnit.CELSIUS, weather: 'Clear', climateZones: [], population: 1000000, sector: 'Alpha', energySources: [] }
       ];
       const mockTransactions: TransactionModel[] = [{
         id: 'tx1',

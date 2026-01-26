@@ -14,6 +14,10 @@ describe('PlanetProfilePage', () => {
 
     fixture = TestBed.createComponent(PlanetProfilePage);
     component = fixture.componentInstance;
+
+    fixture.componentRef.setInput('planetId', 'test-planet-id');
+
+    fixture.detectChanges();
     await fixture.whenStable();
   });
 
